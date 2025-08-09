@@ -306,7 +306,7 @@ export const IntroPage: React.FC = () => {
               flexWrap: 'wrap'
             }}>
               <button
-                onClick={() => window.location.href = '/quickstart'}
+                onClick={() => window.location.href = './quickstart'}
                 style={{
                   background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
                   border: 'none',

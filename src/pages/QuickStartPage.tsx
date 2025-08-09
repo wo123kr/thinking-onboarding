@@ -398,7 +398,7 @@ export const QuickStartPage: React.FC = () => {
 
           {currentStep === steps.length ? (
             <button
-              onClick={() => window.location.href = '/'}
+              onClick={() => window.location.href = './'}
               style={{
                 display: 'flex',
                 alignItems: 'center',

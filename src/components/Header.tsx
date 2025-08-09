@@ -18,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   const theme = colors;
 
   const navigateToHome = () => {
-    window.location.href = '/';
+    window.location.href = './';
   };
 
   const navigateToCompanyHomepage = () => {

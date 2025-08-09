@@ -28,11 +28,11 @@ export const HomePage: React.FC = () => {
   }, []);
 
   const navigateToQuickStart = () => {
-    window.location.href = '/quickstart';
+    window.location.href = './quickstart';
   };
 
   const navigateToIntro = () => {
-    window.location.href = '/intro';
+    window.location.href = './intro';
   };
 
   const showDevelopingMessage = () => {
