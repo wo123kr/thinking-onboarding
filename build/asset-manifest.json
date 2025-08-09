@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/thinking-guide/static/css/main.37e069da.css",
+    "main.js": "/thinking-guide/static/js/main.78796ac5.js",
+    "index.html": "/thinking-guide/index.html",
+    "main.37e069da.css.map": "/thinking-guide/static/css/main.37e069da.css.map",
+    "main.78796ac5.js.map": "/thinking-guide/static/js/main.78796ac5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.37e069da.css",
+    "static/js/main.78796ac5.js"
+  ]
+}
