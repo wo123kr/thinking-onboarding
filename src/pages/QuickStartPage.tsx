@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Building, Users, Database, BarChart, Gamepad2, Play, Trophy, Zap, ChevronUp } from 'lucide-react';
-import { StepProgress, StepButtons } from '../components/StepNavigation';
+import { Users, Database, Trophy, Zap, ChevronUp } from 'lucide-react';
+import { StepProgress } from '../components/StepNavigation';
 import { Layout } from '../components/Layout';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';

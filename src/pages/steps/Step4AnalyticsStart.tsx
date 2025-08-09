@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, TrendingUp, Users, Eye, MousePointer, Clock, PartyPopper, X, Trophy, Star } from 'lucide-react';
-import { Card } from '../../components/Card';
-import { Badge } from '../../components/Badge';
-import { Button } from '../../components/Button';
 import { Checkbox } from '../../components/Checkbox';
-import { InfoBox } from '../../components/InfoBox';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useTheme } from '../../contexts/ThemeContext';
 

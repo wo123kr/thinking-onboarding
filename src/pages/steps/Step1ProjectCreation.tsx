@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Cloud, Server, Building, Zap, Star, Trophy } from 'lucide-react';
 import { Checkbox } from '../../components/Checkbox';
-import { InfoBox } from '../../components/InfoBox';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useTheme } from '../../contexts/ThemeContext';
 

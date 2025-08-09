@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Search, Menu, Sun, Moon, Settings, Bell, User, Star, Trophy, Gamepad2, Zap, Shield } from 'lucide-react';
+import { Play, Settings, User, Star, Trophy, Gamepad2, Zap, Shield } from 'lucide-react';
 import { Layout } from '../components/Layout';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -7,17 +7,13 @@ import { useTheme } from '../contexts/ThemeContext';
 export const HomePage: React.FC = () => {
   const { t } = useLanguage();
   const { colors } = useTheme();
-  const [currentTime, setCurrentTime] = useState(new Date());
+  // const [currentTime, setCurrentTime] = useState(new Date()); // 미사용 변수
   const [screenSize, setScreenSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight
   });
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
     const handleResize = () => {
       setScreenSize({
         width: window.innerWidth,
@@ -27,7 +23,6 @@ export const HomePage: React.FC = () => {
 
     window.addEventListener('resize', handleResize);
     return () => {
-      clearInterval(timer);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
@@ -49,7 +44,7 @@ export const HomePage: React.FC = () => {
 
   // 테마 색상 가져오기
   const currentTheme = colors;
-  const isDesktop = screenSize.width >= 1200;
+  // const isDesktop = screenSize.width >= 1200; // 미사용 변수
 
   // 게이밍 스타일 가이드 카드들
   const guideCards = [

@@ -43,7 +43,7 @@ export const StepProgress: React.FC<StepProgressProps> = ({
 }) => {
   const { t } = useLanguage();
   const { theme: currentTheme, colors } = useTheme();
-  const currentStepIndex = currentStep - 1;
+  // const currentStepIndex = currentStep - 1; // 미사용 변수
   const completedSteps = steps.filter(step => step.completed).length;
   const progressPercentage = (completedSteps / steps.length) * 100;
 

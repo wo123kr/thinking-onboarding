@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Smartphone, Gamepad2, Wrench, Globe, Star, Trophy } from 'lucide-react';
-import { Card } from '../../components/Card';
 import { Badge } from '../../components/Badge';
 import { Checkbox } from '../../components/Checkbox';
 import { InfoBox } from '../../components/InfoBox';

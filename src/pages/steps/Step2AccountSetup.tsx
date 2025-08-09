@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Users, UserPlus, Shield, Eye, EyeOff, Settings, Check, X, Crown, Star } from 'lucide-react';
-import { Card } from '../../components/Card';
+import { Users, UserPlus, Shield, Eye, Crown, Star } from 'lucide-react';
 import { Badge } from '../../components/Badge';
 import { Checkbox } from '../../components/Checkbox';
-import { InfoBox } from '../../components/InfoBox';
 import { Tabs } from '../../components/Tabs';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useTheme } from '../../contexts/ThemeContext';
