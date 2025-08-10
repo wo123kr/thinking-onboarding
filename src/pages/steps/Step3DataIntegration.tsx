@@ -1113,7 +1113,7 @@ function getJavaScriptCode(appData: any, t: (key: string) => string) {
 var config = {
   appId: "${appId || 'YOUR_APP_ID'}",
   serverUrl: "${jsServerUrl}",
-  batch: true, // ${t('step3.batchComment')}
+  batch: false, // ${t('step3.batchComment')}
   autoTrack: {
     pageShow: true, // ${t('step3.pageShowComment')}
     pageHide: true, // ${t('step3.pageHideComment')}

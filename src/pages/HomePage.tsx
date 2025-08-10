@@ -67,8 +67,8 @@ export const HomePage: React.FC = () => {
       gradient: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
       category: t('category.basic'),
       level: t('level.beginner'),
-      onClick: navigateToIntro,
-      status: "available" // 사용 가능
+      onClick: showDevelopingMessage,
+      status: "developing" // 개발중
     },
     {
       id: 3,

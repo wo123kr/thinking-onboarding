@@ -32,11 +32,10 @@ export const Step4AnalyticsStart: React.FC<Step4Props> = ({
       setCelebrationShown(true);
       setHasCompleted(true);
       
-      // 팝업이 표시될 때 팝업이 잘 보이도록 적절한 위치로 스크롤
+      // 팝업이 표시될 때 화면 중앙으로 부드럽게 스크롤
       setTimeout(() => {
         const windowHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
-        // 팝업이 화면 중앙에 잘 보이도록 스크롤 위치 계산
         const scrollPosition = Math.max(0, (documentHeight - windowHeight) / 2);
         
         window.scrollTo({
@@ -44,11 +43,7 @@ export const Step4AnalyticsStart: React.FC<Step4Props> = ({
           left: 0,
           behavior: 'smooth'
         });
-        
-        // 대체 방법으로도 스크롤
-        document.documentElement.scrollTop = scrollPosition;
-        document.body.scrollTop = scrollPosition;
-      }, 200);
+      }, 100);
     }
   }, [understood, hasCompleted, onComplete]);
 
