@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/thinking-onboarding/static/css/main.37e069da.css",
+    "main.js": "/thinking-onboarding/static/js/main.df9f6bae.js",
+    "index.html": "/thinking-onboarding/index.html",
+    "main.37e069da.css.map": "/thinking-onboarding/static/css/main.37e069da.css.map",
+    "main.df9f6bae.js.map": "/thinking-onboarding/static/js/main.df9f6bae.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.37e069da.css",
+    "static/js/main.df9f6bae.js"
+  ]
+}
