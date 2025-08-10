@@ -900,7 +900,8 @@ export const Step4AnalyticsStart: React.FC<Step4Props> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000
+          zIndex: 1000,
+          padding: '20px'
         }}>
           <div style={{
             background: theme.cardBg,
