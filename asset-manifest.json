@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/thinking-onboarding/static/css/main.37e069da.css",
-    "main.js": "/thinking-onboarding/static/js/main.535f0857.js",
+    "main.js": "/thinking-onboarding/static/js/main.c6bfa055.js",
     "index.html": "/thinking-onboarding/index.html",
     "main.37e069da.css.map": "/thinking-onboarding/static/css/main.37e069da.css.map",
-    "main.535f0857.js.map": "/thinking-onboarding/static/js/main.535f0857.js.map"
+    "main.c6bfa055.js.map": "/thinking-onboarding/static/js/main.c6bfa055.js.map"
   },
   "entrypoints": [
     "static/css/main.37e069da.css",
-    "static/js/main.535f0857.js"
+    "static/js/main.c6bfa055.js"
   ]
 }
