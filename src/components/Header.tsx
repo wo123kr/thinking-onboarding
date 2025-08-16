@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, Gamepad2, ExternalLink, Globe, ChevronDown, Sun, Moon } from 'lucide-react';
+import { Gamepad2, ExternalLink, Globe, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useLanguage, Language } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -136,29 +136,31 @@ export const Header: React.FC<HeaderProps> = ({
           <span style={{ color: theme.text, fontSize: '14px', fontWeight: '600' }}>{t('header.homepage')}</span>
         </div>
 
-        {/* 프리미엄 버튼 */}
-        <div style={{
-          background: theme.premium,
-          borderRadius: '12px',
-          padding: '8px 16px',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
-          transition: 'all 0.3s ease'
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-          (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 20px rgba(245, 158, 11, 0.5)';
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-          (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
-        }}
+        {/* 가이드 버튼 */}
+        <div 
+          onClick={() => window.open('https://docs-v2.thinkingdata.kr/?version=latest&lan=ko-KR&code=user_guide_menu&anchorId=', '_blank')}
+          style={{
+            background: theme.premium,
+            borderRadius: '12px',
+            padding: '8px 16px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
+            (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 20px rgba(245, 158, 11, 0.5)';
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+            (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+          }}
         >
-          <Star size={16} style={{ color: 'white' }} />
-          <span style={{ color: 'white', fontSize: '14px', fontWeight: '600' }}>{t('header.premium')}</span>
+          <ExternalLink size={16} style={{ color: 'white' }} />
+          <span style={{ color: 'white', fontSize: '14px', fontWeight: '600' }}>{t('header.guideCenter')}</span>
         </div>
 
         {/* 테마 토글 버튼 */}
