@@ -81,21 +81,33 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
       'guide.support.subtitle': '기술 지원 및 전문가 상담',
       
       // Intro Page
-      'intro.title': '🚀 Thinking Engine',
-      'intro.subtitle': '차세대 데이터 분석 플랫폼으로 비즈니스 인사이트를 발견하세요',
-      'intro.stats.activeUsers': '활성 사용자',
-      'intro.stats.processedEvents': '처리된 이벤트',
-      'intro.stats.satisfaction': '고객 만족도',
-      'intro.features.realtime.title': '실시간 분석',
-      'intro.features.realtime.description': '실시간으로 데이터를 수집하고 분석하여 즉시 인사이트를 얻으세요',
-      'intro.features.security.title': '보안 & 권한',
-      'intro.features.security.description': '엔터프라이즈급 보안과 세밀한 권한 관리로 데이터를 안전하게 보호',
-      'intro.features.quickSetup.title': '빠른 구축',
-      'intro.features.quickSetup.description': '간단한 설정만으로 몇 분 안에 데이터 수집과 분석을 시작하세요',
-      'intro.cta.title': '지금 시작해보세요!',
-      'intro.cta.subtitle': '빠른 시작 가이드를 통해 몇 분 안에 데이터 분석을 시작할 수 있습니다',
-      'intro.cta.quickStart': '빠른 시작하기',
-      'intro.cta.viewDocs': '문서 보기',
+      'intro.title': '🚀 빠른 시작 가이드',
+      'intro.subtitle': '4단계 미션을 완료하여, Thinking Engine의 세계에 진입해보세요!',
+      'intro.goal': '🎯 목표: 각 단계를 클리어하고 최종 보상을 획득하세요.',
+      'intro.completedMissions': '완료된 미션',
+      'intro.currentStep': '현재 단계',
+      'intro.progress': '진행률',
+      
+      // Intro Steps
+      'intro.step.overview.title': 'Thinking Engine 소개',
+      'intro.step.overview.description': '플랫폼의 핵심 기능과 특징을 살펴봅니다',
+      'intro.step.system.title': '시스템 아키텍처',
+      'intro.step.system.description': '데이터 수집부터 분석까지의 전체 시스템을 이해합니다',
+      'intro.step.datacollection.title': '데이터 수집 시뮬레이션',
+      'intro.step.datacollection.description': '실제 게임을 통해 데이터 수집 과정을 체험합니다',
+      'intro.step.datamodels.title': '데이터 모델',
+      'intro.step.datamodels.description': '데이터 구조와 분석 모델을 학습합니다',
+      
+      // Intro Content
+      'intro.overview.complete': 'Thinking Engine을 이해했습니다',
+      'intro.system.complete': '시스템 구조를 이해했습니다',
+      'intro.datacollection.complete': '데이터 수집 과정을 이해했습니다',
+      'intro.datamodels.complete': '데이터 모델을 이해했습니다',
+      
+      'intro.overview.completed': 'Thinking Engine 소개 완료!',
+      'intro.system.completed': '시스템 구조 이해 완료!',
+      'intro.datacollection.completed': '데이터 수집 시뮬레이션 완료!',
+      'intro.datamodels.completed': '데이터 모델 이해 완료!',
       
       // Categories
       'category.start': '시작하기',
@@ -675,21 +687,33 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
       'guide.support.subtitle': 'Technical support and expert consultation',
       
       // Intro Page
-      'intro.title': '🚀 Thinking Engine',
-      'intro.subtitle': 'Discover business insights with next-generation data analytics platform',
-      'intro.stats.activeUsers': 'Active Users',
-      'intro.stats.processedEvents': 'Processed Events',
-      'intro.stats.satisfaction': 'Customer Satisfaction',
-      'intro.features.realtime.title': 'Real-time Analytics',
-      'intro.features.realtime.description': 'Collect and analyze data in real-time to get instant insights',
-      'intro.features.security.title': 'Security & Permissions',
-      'intro.features.security.description': 'Protect your data safely with enterprise-grade security and granular permission management',
-      'intro.features.quickSetup.title': 'Quick Setup',
-      'intro.features.quickSetup.description': 'Start data collection and analysis in minutes with simple configuration',
-      'intro.cta.title': 'Get Started Now!',
-      'intro.cta.subtitle': 'Start data analysis in minutes with our quick start guide',
-      'intro.cta.quickStart': 'Quick Start',
-      'intro.cta.viewDocs': 'View Docs',
+      'intro.title': '🚀 Quick Start Guide',
+      'intro.subtitle': 'Complete 4-step missions to enter the world of Thinking Engine!',
+      'intro.goal': '🎯 Goal: Clear each step and earn the final reward.',
+      'intro.completedMissions': 'Completed Missions',
+      'intro.currentStep': 'Current Step',
+      'intro.progress': 'Progress',
+      
+      // Intro Steps
+      'intro.step.overview.title': 'Thinking Engine Overview',
+      'intro.step.overview.description': 'Explore the core features and characteristics of the platform',
+      'intro.step.system.title': 'System Architecture',
+      'intro.step.system.description': 'Understand the entire system from data collection to analysis',
+      'intro.step.datacollection.title': 'Data Collection Simulation',
+      'intro.step.datacollection.description': 'Experience the data collection process through real games',
+      'intro.step.datamodels.title': 'Data Models',
+      'intro.step.datamodels.description': 'Learn data structures and analysis models',
+      
+      // Intro Content
+      'intro.overview.complete': 'I understand Thinking Engine',
+      'intro.system.complete': 'I understand the system structure',
+      'intro.datacollection.complete': 'I understand the data collection process',
+      'intro.datamodels.complete': 'I understand data models',
+      
+      'intro.overview.completed': 'Thinking Engine Overview Complete!',
+      'intro.system.completed': 'System Structure Understanding Complete!',
+      'intro.datacollection.completed': 'Data Collection Simulation Complete!',
+      'intro.datamodels.completed': 'Data Models Understanding Complete!',
       
       // Categories
       'category.start': 'Getting Started',
@@ -1269,21 +1293,33 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
       'guide.support.subtitle': '技术支持和专家咨询',
       
       // Intro Page
-      'intro.title': '🚀 Thinking Engine',
-      'intro.subtitle': '使用下一代数据分析平台发现商业洞察',
-      'intro.stats.activeUsers': '活跃用户',
-      'intro.stats.processedEvents': '已处理事件',
-      'intro.stats.satisfaction': '客户满意度',
-      'intro.features.realtime.title': '实时分析',
-      'intro.features.realtime.description': '实时收集和分析数据，立即获得洞察',
-      'intro.features.security.title': '安全与权限',
-      'intro.features.security.description': '通过企业级安全和细粒度权限管理安全保护您的数据',
-      'intro.features.quickSetup.title': '快速设置',
-      'intro.features.quickSetup.description': '通过简单配置在几分钟内开始数据收集和分析',
-      'intro.cta.title': '立即开始！',
-      'intro.cta.subtitle': '通过我们的快速开始指南在几分钟内开始数据分析',
-      'intro.cta.quickStart': '快速开始',
-      'intro.cta.viewDocs': '查看文档',
+      'intro.title': '🚀 快速开始指南',
+      'intro.subtitle': '完成4步任务，进入Thinking Engine的世界！',
+      'intro.goal': '🎯 目标：清除每个步骤并获得最终奖励。',
+      'intro.completedMissions': '已完成任务',
+      'intro.currentStep': '当前步骤',
+      'intro.progress': '进度',
+      
+      // Intro Steps
+      'intro.step.overview.title': 'Thinking Engine 概览',
+      'intro.step.overview.description': '探索平台的核心功能和特征',
+      'intro.step.system.title': '系统架构',
+      'intro.step.system.description': '了解从数据收集到分析的整个系统',
+      'intro.step.datacollection.title': '数据收集模拟',
+      'intro.step.datacollection.description': '通过真实游戏体验数据收集过程',
+      'intro.step.datamodels.title': '数据模型',
+      'intro.step.datamodels.description': '学习数据结构和分析模型',
+      
+      // Intro Content
+      'intro.overview.complete': '我理解了Thinking Engine',
+      'intro.system.complete': '我理解了系统结构',
+      'intro.datacollection.complete': '我理解了数据收集过程',
+      'intro.datamodels.complete': '我理解了数据模型',
+      
+      'intro.overview.completed': 'Thinking Engine概览完成！',
+      'intro.system.completed': '系统结构理解完成！',
+      'intro.datacollection.completed': '数据收集模拟完成！',
+      'intro.datamodels.completed': '数据模型理解完成！',
       
       // Categories
       'category.start': '入门',
