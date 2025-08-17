@@ -6,12 +6,11 @@ import {
   Shield,
   Star,
   Activity,
-  TrendingUp,
   Settings,
-  Brain,
   CheckCircle,
   AlertTriangle,
   TableProperties,
+  ChevronUp,
 } from "lucide-react";
 import { StepProgress } from "../components/StepProgress";
 import { Layout } from "../components/Layout";
@@ -46,6 +45,7 @@ export const IntroPage: React.FC = () => {
 
   // 현재 활성 단계 상태
   const [currentStep, setCurrentStep] = useState(1);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const [stepCompletion, setStepCompletion] = useState<StepCompletion>({
     overview: false,
     "data-structure": false,
@@ -67,7 +67,6 @@ export const IntroPage: React.FC = () => {
 
   // 데이터 수집 시뮬레이션 상태 (Step 4용)
   const [eventLogs, setEventLogs] = useState<any[]>([]);
-  const [logCount, setLogCount] = useState(0);
   const [currentUser] = useState<any>({
     user_id: "TD001",
     "#account_id": "e926bc78-fbc9-4d20-856c-bb3ab18dbd37",
@@ -77,7 +76,6 @@ export const IntroPage: React.FC = () => {
     session_count: 1,
   });
   const [currentAction, setCurrentAction] = useState<string | null>(null);
-  const [isSimulating, setIsSimulating] = useState(false);
 
   // 사용자 배달 앱 통계
   const [userStats, setUserStats] = useState({
@@ -99,6 +97,27 @@ export const IntroPage: React.FC = () => {
       logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
     }
   }, [eventLogs]);
+
+  // 스크롤 이벤트 처리
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      setShowScrollTop(scrollTop > 300); // 300px 스크롤하면 버튼 표시
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 맨 위로 스크롤하는 함수
+  const scrollToTop = () => {
+    // 부드러운 스크롤로 한번에 맨 위로
+    window.scrollTo({ 
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth' 
+    });
+  };
 
   // 레벨 달성 체크 - 새로운 레벨 달성 시 이벤트 생성
   useEffect(() => {
@@ -172,47 +191,47 @@ export const IntroPage: React.FC = () => {
     {
       id: 1,
       key: "overview" as StepType,
-      title: t('intro.step.overview'),
+      title: t("intro.step.overview"),
       icon: <Zap size={20} />,
       completed: stepCompletion.overview,
       gradient: "linear-gradient(135deg, #f59e0b, #d97706)",
-      description: t('intro.step.overview.description'),
+      description: t("intro.step.overview.description"),
     },
     {
       id: 2,
       key: "data-structure" as StepType,
-      title: t('intro.step.dataStructure'),
+      title: t("intro.step.dataStructure"),
       icon: <Settings size={20} />,
       completed: stepCompletion["data-structure"],
       gradient: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-      description: t('intro.step.dataStructure.description'),
+      description: t("intro.step.dataStructure.description"),
     },
     {
       id: 3,
       key: "tracking-policy" as StepType,
-      title: t('intro.step.trackingPolicy'),
+      title: t("intro.step.trackingPolicy"),
       icon: <Database size={20} />,
       completed: stepCompletion["tracking-policy"],
       gradient: "linear-gradient(135deg, #06b6d4, #0891b2)",
-      description: t('intro.step.trackingPolicy.description'),
+      description: t("intro.step.trackingPolicy.description"),
     },
     {
       id: 4,
       key: "data-simulation" as StepType,
-      title: t('intro.step.dataSimulation'),
+      title: t("intro.step.dataSimulation"),
       icon: <Activity size={20} />,
       completed: stepCompletion["data-simulation"],
       gradient: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
-      description: t('intro.step.dataSimulation.description'),
+      description: t("intro.step.dataSimulation.description"),
     },
     {
       id: 5,
       key: "data-utilization" as StepType,
-      title: t('intro.step.dataUtilization'),
+      title: t("intro.step.dataUtilization"),
       icon: <BarChart size={20} />,
       completed: stepCompletion["data-utilization"],
       gradient: "linear-gradient(135deg, #10b981, #059669)",
-      description: t('intro.step.dataUtilization.description'),
+      description: t("intro.step.dataUtilization.description"),
     },
   ];
 
@@ -324,7 +343,6 @@ export const IntroPage: React.FC = () => {
     };
 
     setEventLogs((prev) => [...prev.slice(-19), eventData]);
-    setLogCount((prev) => prev + 1);
 
     // 액션 표시
     setCurrentAction(`🎮 ${eventType} 이벤트 생성됨`);
@@ -343,7 +361,7 @@ export const IntroPage: React.FC = () => {
           textAlign: "center",
         }}
       >
-        {t('intro.overview.title')}
+        {t("intro.overview.title")}
       </h2>
 
       <p
@@ -357,10 +375,12 @@ export const IntroPage: React.FC = () => {
           margin: "0 auto 32px",
         }}
       >
-        {t('intro.overview.subtitle')}
+        {t("intro.overview.subtitle")}
         <br />
-        <strong style={{ color: theme.text }}>{t('intro.overview.subtitleHighlight')}</strong>
-        {t('intro.overview.subtitleEnd')}
+        <strong style={{ color: theme.text }}>
+          {t("intro.overview.subtitleHighlight")}
+        </strong>
+        {t("intro.overview.subtitleEnd")}
       </p>
 
       {/* 핵심 가치 제안 */}
@@ -385,7 +405,7 @@ export const IntroPage: React.FC = () => {
             marginBottom: "16px",
           }}
         >
-          {t('intro.overview.valueProposition')}
+          {t("intro.overview.valueProposition")}
         </h3>
         <p
           style={{
@@ -395,11 +415,11 @@ export const IntroPage: React.FC = () => {
             marginBottom: "24px",
           }}
         >
-          {t('intro.overview.processDescription')}
+          {t("intro.overview.processDescription")}
           <br />
-          {t('intro.overview.processDetail')}
+          {t("intro.overview.processDetail")}
           <br />
-          {t('intro.overview.processDetail2')}
+          {t("intro.overview.processDetail2")}
         </p>
 
         <div
@@ -411,12 +431,20 @@ export const IntroPage: React.FC = () => {
           }}
         >
           {[
-            { label: t('intro.overview.stats.clients'), value: "1,500+", color: "#8b5cf6" },
-            { label: t('intro.overview.stats.products'), value: "8,000+", color: "#3b82f6" },
             {
-              label: t('intro.overview.stats.gameModels'),
+              label: t("intro.overview.stats.clients"),
+              value: "1,500+",
+              color: "#8b5cf6",
+            },
+            {
+              label: t("intro.overview.stats.products"),
+              value: "8,000+",
+              color: "#3b82f6",
+            },
+            {
+              label: t("intro.overview.stats.gameModels"),
               value: "13+",
-              subtitle: t('intro.overview.stats.analysisModels'),
+              subtitle: t("intro.overview.stats.analysisModels"),
               color: "#10b981",
             },
           ].map((stat, index) => (
@@ -467,7 +495,7 @@ export const IntroPage: React.FC = () => {
           textAlign: "center",
         }}
       >
-        {t('intro.overview.featuresTitle')}
+        {t("intro.overview.featuresTitle")}
       </h3>
 
       <div
@@ -481,68 +509,68 @@ export const IntroPage: React.FC = () => {
         {[
           {
             icon: <BarChart size={28} />,
-            title: t('intro.overview.feature1.title'),
-            desc: t('intro.overview.feature1.desc'),
+            title: t("intro.overview.feature1.title"),
+            desc: t("intro.overview.feature1.desc"),
             color: "#8b5cf6",
             details: [
-              t('intro.overview.feature1.detail1'),
-              t('intro.overview.feature1.detail2'),
-              t('intro.overview.feature1.detail3'),
+              t("intro.overview.feature1.detail1"),
+              t("intro.overview.feature1.detail2"),
+              t("intro.overview.feature1.detail3"),
             ],
           },
           {
             icon: <Activity size={28} />,
-            title: t('intro.overview.feature2.title'),
-            desc: t('intro.overview.feature2.desc'),
+            title: t("intro.overview.feature2.title"),
+            desc: t("intro.overview.feature2.desc"),
             color: "#3b82f6",
             details: [
-              t('intro.overview.feature2.detail1'),
-              t('intro.overview.feature2.detail2'),
-              t('intro.overview.feature2.detail3'),
+              t("intro.overview.feature2.detail1"),
+              t("intro.overview.feature2.detail2"),
+              t("intro.overview.feature2.detail3"),
             ],
           },
           {
             icon: <Settings size={28} />,
-            title: t('intro.overview.feature3.title'),
-            desc: t('intro.overview.feature3.desc'),
+            title: t("intro.overview.feature3.title"),
+            desc: t("intro.overview.feature3.desc"),
             color: "#10b981",
             details: [
-              t('intro.overview.feature3.detail1'),
-              t('intro.overview.feature3.detail2'),
-              t('intro.overview.feature3.detail3'),
+              t("intro.overview.feature3.detail1"),
+              t("intro.overview.feature3.detail2"),
+              t("intro.overview.feature3.detail3"),
             ],
           },
           {
             icon: <Star size={28} />,
-            title: t('intro.overview.feature4.title'),
-            desc: t('intro.overview.feature4.desc'),
+            title: t("intro.overview.feature4.title"),
+            desc: t("intro.overview.feature4.desc"),
             color: "#f59e0b",
             details: [
-              t('intro.overview.feature4.detail1'),
-              t('intro.overview.feature4.detail2'),
-              t('intro.overview.feature4.detail3'),
+              t("intro.overview.feature4.detail1"),
+              t("intro.overview.feature4.detail2"),
+              t("intro.overview.feature4.detail3"),
             ],
           },
           {
             icon: <Shield size={28} />,
-            title: t('intro.overview.feature5.title'),
-            desc: t('intro.overview.feature5.desc'),
+            title: t("intro.overview.feature5.title"),
+            desc: t("intro.overview.feature5.desc"),
             color: "#ef4444",
             details: [
-              t('intro.overview.feature5.detail1'),
-              t('intro.overview.feature5.detail2'),
-              t('intro.overview.feature5.detail3'),
+              t("intro.overview.feature5.detail1"),
+              t("intro.overview.feature5.detail2"),
+              t("intro.overview.feature5.detail3"),
             ],
           },
           {
             icon: <Database size={28} />,
-            title: t('intro.overview.feature6.title'),
-            desc: t('intro.overview.feature6.desc'),
+            title: t("intro.overview.feature6.title"),
+            desc: t("intro.overview.feature6.desc"),
             color: "#06b6d4",
             details: [
-              t('intro.overview.feature6.detail1'),
-              t('intro.overview.feature6.detail2'),
-              t('intro.overview.feature6.detail3'),
+              t("intro.overview.feature6.detail1"),
+              t("intro.overview.feature6.detail2"),
+              t("intro.overview.feature6.detail3"),
             ],
           },
         ].map((feature, index) => (
@@ -664,7 +692,7 @@ export const IntroPage: React.FC = () => {
             textAlign: "center",
           }}
         >
-          {t('intro.overview.industryTitle')}
+          {t("intro.overview.industryTitle")}
         </h3>
 
         <div
@@ -676,37 +704,37 @@ export const IntroPage: React.FC = () => {
         >
           {[
             {
-              industry: t('intro.overview.industry1.name'),
+              industry: t("intro.overview.industry1.name"),
               icon: "🎯",
               effects: [
-                t('intro.overview.industry1.effect1'),
-                t('intro.overview.industry1.effect2'),
-                t('intro.overview.industry1.effect3'),
-                t('intro.overview.industry1.effect4'),
+                t("intro.overview.industry1.effect1"),
+                t("intro.overview.industry1.effect2"),
+                t("intro.overview.industry1.effect3"),
+                t("intro.overview.industry1.effect4"),
               ],
-              result: t('intro.overview.industry1.result'),
+              result: t("intro.overview.industry1.result"),
             },
             {
-              industry: t('intro.overview.industry2.name'),
+              industry: t("intro.overview.industry2.name"),
               icon: "📈",
               effects: [
-                t('intro.overview.industry2.effect1'),
-                t('intro.overview.industry2.effect2'),
-                t('intro.overview.industry2.effect3'),
-                t('intro.overview.industry2.effect4'),
+                t("intro.overview.industry2.effect1"),
+                t("intro.overview.industry2.effect2"),
+                t("intro.overview.industry2.effect3"),
+                t("intro.overview.industry2.effect4"),
               ],
-              result: t('intro.overview.industry2.result'),
+              result: t("intro.overview.industry2.result"),
             },
             {
-              industry: t('intro.overview.industry3.name'),
+              industry: t("intro.overview.industry3.name"),
               icon: "🎬",
               effects: [
-                t('intro.overview.industry3.effect1'),
-                t('intro.overview.industry3.effect2'),
-                t('intro.overview.industry3.effect3'),
-                t('intro.overview.industry3.effect4'),
+                t("intro.overview.industry3.effect1"),
+                t("intro.overview.industry3.effect2"),
+                t("intro.overview.industry3.effect3"),
+                t("intro.overview.industry3.effect4"),
               ],
-              result: t('intro.overview.industry3.result'),
+              result: t("intro.overview.industry3.result"),
             },
           ].map((sector, index) => (
             <div
@@ -802,7 +830,6 @@ export const IntroPage: React.FC = () => {
         </div>
       </div>
 
-
       <div
         style={{
           marginTop: "32px",
@@ -826,7 +853,7 @@ export const IntroPage: React.FC = () => {
                 lineHeight: "1.5",
               }}
             >
-              {t('intro.overview.checkboxLabel')}
+              {t("intro.overview.checkboxLabel")}
             </span>
           }
         />
@@ -846,7 +873,7 @@ export const IntroPage: React.FC = () => {
           textAlign: "center",
         }}
       >
-        {t('intro.dataStructure.title')}
+        {t("intro.dataStructure.title")}
       </h2>
 
       <p
@@ -860,11 +887,15 @@ export const IntroPage: React.FC = () => {
           margin: "0 auto 32px",
         }}
       >
-        {t('intro.dataStructure.subtitle')}{" "}
-        <strong style={{ color: theme.text }}>{t('intro.dataStructure.subtitleHighlight')}</strong>{" "}
-        <strong style={{ color: theme.text }}>{t('intro.dataStructure.subtitleHighlight2')}</strong>
+        {t("intro.dataStructure.subtitle")}{" "}
+        <strong style={{ color: theme.text }}>
+          {t("intro.dataStructure.subtitleHighlight")}
+        </strong>{" "}
+        <strong style={{ color: theme.text }}>
+          {t("intro.dataStructure.subtitleHighlight2")}
+        </strong>
         <br />
-        {t('intro.dataStructure.subtitleEnd')}
+        {t("intro.dataStructure.subtitleEnd")}
       </p>
 
       {/* SDK 통합 플로우 */}
@@ -894,7 +925,7 @@ export const IntroPage: React.FC = () => {
           }}
         >
           <Settings size={28} style={{ color: "#3b82f6" }} />
-          {t('intro.dataStructure.sdkTitle')}
+          {t("intro.dataStructure.sdkTitle")}
         </h3>
 
         <div
@@ -924,10 +955,13 @@ export const IntroPage: React.FC = () => {
             marginBottom: "24px",
           }}
         >
-          {t('intro.dataStructure.sdkDescription')}{" "}
-          <strong>{t('intro.dataStructure.sdkDescription2')}</strong>{t('intro.dataStructure.sdkDescription3')}
+          {t("intro.dataStructure.sdkDescription")}{" "}
+          <strong>{t("intro.dataStructure.sdkDescription2")}</strong>
+          {t("intro.dataStructure.sdkDescription3")}
           <br />
-          {t('intro.dataStructure.sdkDescription4')} <strong>{t('intro.dataStructure.sdkDescription5')}</strong>{t('intro.dataStructure.sdkDescription6')}
+          {t("intro.dataStructure.sdkDescription4")}{" "}
+          <strong>{t("intro.dataStructure.sdkDescription5")}</strong>
+          {t("intro.dataStructure.sdkDescription6")}
         </p>
 
         <div
@@ -940,26 +974,26 @@ export const IntroPage: React.FC = () => {
         >
           {[
             {
-              title: t('intro.dataStructure.sdk1.title'),
-              desc: t('intro.dataStructure.sdk1.desc'),
+              title: t("intro.dataStructure.sdk1.title"),
+              desc: t("intro.dataStructure.sdk1.desc"),
               icon: "📱",
               color: "#3b82f6",
             },
             {
-              title: t('intro.dataStructure.sdk2.title'),
-              desc: t('intro.dataStructure.sdk2.desc'),
+              title: t("intro.dataStructure.sdk2.title"),
+              desc: t("intro.dataStructure.sdk2.desc"),
               icon: "🖥️",
               color: "#10b981",
             },
             {
-              title: t('intro.dataStructure.sdk3.title'),
-              desc: t('intro.dataStructure.sdk3.desc'),
+              title: t("intro.dataStructure.sdk3.title"),
+              desc: t("intro.dataStructure.sdk3.desc"),
               icon: "🚌",
               color: "#f59e0b",
             },
             {
-              title: t('intro.dataStructure.sdk4.title'),
-              desc: t('intro.dataStructure.sdk4.desc'),
+              title: t("intro.dataStructure.sdk4.title"),
+              desc: t("intro.dataStructure.sdk4.desc"),
               icon: "📦",
               color: "#8b5cf6",
             },
@@ -1047,7 +1081,7 @@ export const IntroPage: React.FC = () => {
           }}
         >
           <Database size={28} style={{ color: "#10b981" }} />
-          {t('intro.dataStructure.architectureTitle')}
+          {t("intro.dataStructure.architectureTitle")}
         </h3>
 
         <div
@@ -1077,14 +1111,19 @@ export const IntroPage: React.FC = () => {
             marginBottom: "24px",
           }}
         >
-          {t('intro.dataStructure.archDescription')}{" "}
-          <strong>{t('intro.dataStructure.archDescription2')}</strong>{t('intro.dataStructure.archDescription3')}{" "}
-          <strong>{t('intro.dataStructure.archDescription4')}</strong>{t('intro.dataStructure.archDescription5')}
+          {t("intro.dataStructure.archDescription")}{" "}
+          <strong>{t("intro.dataStructure.archDescription2")}</strong>
+          {t("intro.dataStructure.archDescription3")}{" "}
+          <strong>{t("intro.dataStructure.archDescription4")}</strong>
+          {t("intro.dataStructure.archDescription5")}
           <br />
-          <strong>{t('intro.dataStructure.archDescription6')}</strong>{t('intro.dataStructure.archDescription7')}{" "}
-          <strong>{t('intro.dataStructure.archDescription8')}</strong>{t('intro.dataStructure.archDescription9')}
+          <strong>{t("intro.dataStructure.archDescription6")}</strong>
+          {t("intro.dataStructure.archDescription7")}{" "}
+          <strong>{t("intro.dataStructure.archDescription8")}</strong>
+          {t("intro.dataStructure.archDescription9")}
           <br />
-          <strong>{t('intro.dataStructure.archDescription10')}</strong>{t('intro.dataStructure.archDescription11')}
+          <strong>{t("intro.dataStructure.archDescription10")}</strong>
+          {t("intro.dataStructure.archDescription11")}
         </p>
 
         <div
@@ -1097,26 +1136,26 @@ export const IntroPage: React.FC = () => {
         >
           {[
             {
-              title: t('intro.dataStructure.arch1.title'),
-              desc: t('intro.dataStructure.arch1.desc'),
+              title: t("intro.dataStructure.arch1.title"),
+              desc: t("intro.dataStructure.arch1.desc"),
               icon: "📡",
               color: "#3b82f6",
             },
             {
-              title: t('intro.dataStructure.arch2.title'),
-              desc: t('intro.dataStructure.arch2.desc'),
+              title: t("intro.dataStructure.arch2.title"),
+              desc: t("intro.dataStructure.arch2.desc"),
               icon: "🔄",
               color: "#10b981",
             },
             {
-              title: t('intro.dataStructure.arch3.title'),
-              desc: t('intro.dataStructure.arch3.desc'),
+              title: t("intro.dataStructure.arch3.title"),
+              desc: t("intro.dataStructure.arch3.desc"),
               icon: "⚡",
               color: "#f59e0b",
             },
             {
-              title: t('intro.dataStructure.arch4.title'),
-              desc: t('intro.dataStructure.arch4.desc'),
+              title: t("intro.dataStructure.arch4.title"),
+              desc: t("intro.dataStructure.arch4.desc"),
               icon: "🏭",
               color: "#8b5cf6",
             },
@@ -1204,7 +1243,7 @@ export const IntroPage: React.FC = () => {
           }}
         >
           <TableProperties size={28} style={{ color: "#f59e0b" }} />
-          {t('intro.dataStructure.tableTitle')}
+          {t("intro.dataStructure.tableTitle")}
         </h3>
 
         <p
@@ -1216,10 +1255,13 @@ export const IntroPage: React.FC = () => {
             textAlign: "center",
           }}
         >
-          {t('intro.dataStructure.tableDescription')} <strong>{t('intro.dataStructure.tableDescription2')}</strong>{t('intro.dataStructure.tableDescription3')}
+          {t("intro.dataStructure.tableDescription")}{" "}
+          <strong>{t("intro.dataStructure.tableDescription2")}</strong>
+          {t("intro.dataStructure.tableDescription3")}
           <br />
-          {t('intro.dataStructure.tableDescription4')}{" "}
-          <strong>{t('intro.dataStructure.tableDescription5')}</strong>{t('intro.dataStructure.tableDescription6')}
+          {t("intro.dataStructure.tableDescription4")}{" "}
+          <strong>{t("intro.dataStructure.tableDescription5")}</strong>
+          {t("intro.dataStructure.tableDescription6")}
         </p>
 
         <div
@@ -1314,7 +1356,7 @@ export const IntroPage: React.FC = () => {
                     textAlign: "left",
                   }}
                 >
-                  {t('intro.dataStructure.usersTableTitle')}
+                  {t("intro.dataStructure.usersTableTitle")}
                 </h4>
                 <p
                   style={{
@@ -1325,7 +1367,7 @@ export const IntroPage: React.FC = () => {
                     textAlign: "left",
                   }}
                 >
-                  {t('intro.dataStructure.usersTableSubtitle')}
+                  {t("intro.dataStructure.usersTableSubtitle")}
                 </p>
               </div>
             </div>
@@ -1338,7 +1380,8 @@ export const IntroPage: React.FC = () => {
                 marginBottom: "20px",
               }}
             >
-              <strong>{t('intro.dataStructure.usersTableDescription')}</strong> {t('intro.dataStructure.usersTableDescription2')}
+              <strong>{t("intro.dataStructure.usersTableDescription")}</strong>{" "}
+              {t("intro.dataStructure.usersTableDescription2")}
             </p>
 
             <div
@@ -1362,7 +1405,7 @@ export const IntroPage: React.FC = () => {
                   letterSpacing: "0.5px",
                 }}
               >
-                {t('intro.dataStructure.coreColumns')}
+                {t("intro.dataStructure.coreColumns")}
               </h5>
               <div
                 style={{
@@ -1410,23 +1453,26 @@ export const IntroPage: React.FC = () => {
                 gap: "8px",
               }}
             >
-              {[t('intro.dataStructure.usersTable.tag1'), t('intro.dataStructure.usersTable.tag2'), t('intro.dataStructure.usersTable.tag3'), t('intro.dataStructure.usersTable.tag4')].map(
-                (tag, index) => (
-                  <span
-                    key={index}
-                    style={{
-                      fontSize: "11px",
-                      background: "rgba(59, 130, 246, 0.15)",
-                      color: "#3b82f6",
-                      padding: "6px 10px",
-                      borderRadius: "20px",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {tag}
-                  </span>
-                )
-              )}
+              {[
+                t("intro.dataStructure.usersTable.tag1"),
+                t("intro.dataStructure.usersTable.tag2"),
+                t("intro.dataStructure.usersTable.tag3"),
+                t("intro.dataStructure.usersTable.tag4"),
+              ].map((tag, index) => (
+                <span
+                  key={index}
+                  style={{
+                    fontSize: "11px",
+                    background: "rgba(59, 130, 246, 0.15)",
+                    color: "#3b82f6",
+                    padding: "6px 10px",
+                    borderRadius: "20px",
+                    fontWeight: "600",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
 
@@ -1494,7 +1540,7 @@ export const IntroPage: React.FC = () => {
                     textAlign: "left",
                   }}
                 >
-                  {t('intro.dataStructure.eventsTableTitle')}
+                  {t("intro.dataStructure.eventsTableTitle")}
                 </h4>
                 <p
                   style={{
@@ -1505,7 +1551,7 @@ export const IntroPage: React.FC = () => {
                     textAlign: "left",
                   }}
                 >
-                  {t('intro.dataStructure.eventsTableSubtitle')}
+                  {t("intro.dataStructure.eventsTableSubtitle")}
                 </p>
               </div>
             </div>
@@ -1518,7 +1564,10 @@ export const IntroPage: React.FC = () => {
                 marginBottom: "20px",
               }}
             >
-              {t('intro.dataStructure.eventsTableDescription')} <strong>{t('intro.dataStructure.eventsTableDescription2')}</strong>
+              {t("intro.dataStructure.eventsTableDescription")}{" "}
+              <strong>
+                {t("intro.dataStructure.eventsTableDescription2")}
+              </strong>
             </p>
 
             <div
@@ -1542,7 +1591,7 @@ export const IntroPage: React.FC = () => {
                   letterSpacing: "0.5px",
                 }}
               >
-                {t('intro.dataStructure.coreColumns')}
+                {t("intro.dataStructure.coreColumns")}
               </h5>
               <div
                 style={{
@@ -1590,23 +1639,26 @@ export const IntroPage: React.FC = () => {
                 gap: "8px",
               }}
             >
-              {[t('intro.dataStructure.eventsTable.tag1'), t('intro.dataStructure.eventsTable.tag2'), t('intro.dataStructure.eventsTable.tag3'), t('intro.dataStructure.eventsTable.tag4')].map(
-                (tag, index) => (
-                  <span
-                    key={index}
-                    style={{
-                      fontSize: "11px",
-                      background: "rgba(139, 92, 246, 0.15)",
-                      color: "#8b5cf6",
-                      padding: "6px 10px",
-                      borderRadius: "20px",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {tag}
-                  </span>
-                )
-              )}
+              {[
+                t("intro.dataStructure.eventsTable.tag1"),
+                t("intro.dataStructure.eventsTable.tag2"),
+                t("intro.dataStructure.eventsTable.tag3"),
+                t("intro.dataStructure.eventsTable.tag4"),
+              ].map((tag, index) => (
+                <span
+                  key={index}
+                  style={{
+                    fontSize: "11px",
+                    background: "rgba(139, 92, 246, 0.15)",
+                    color: "#8b5cf6",
+                    padding: "6px 10px",
+                    borderRadius: "20px",
+                    fontWeight: "600",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
         </div>
@@ -1656,7 +1708,7 @@ export const IntroPage: React.FC = () => {
                 margin: 0,
               }}
             >
-              {t('intro.dataStructure.relationshipTitle')}
+              {t("intro.dataStructure.relationshipTitle")}
             </h4>
           </div>
 
@@ -1697,7 +1749,7 @@ export const IntroPage: React.FC = () => {
               >
                 user_id = "U001"
                 <br />
-                name = "{t('intro.dataStructure.exampleName')}"
+                name = "{t("intro.dataStructure.exampleName")}"
                 <br />
                 age = 28
               </p>
@@ -1712,7 +1764,7 @@ export const IntroPage: React.FC = () => {
                   display: "inline-block",
                 }}
               >
-                {t('intro.dataStructure.staticData')}
+                {t("intro.dataStructure.staticData")}
               </div>
             </div>
 
@@ -1741,7 +1793,7 @@ export const IntroPage: React.FC = () => {
                   borderRadius: "8px",
                 }}
               >
-                {t('intro.dataStructure.connection')}
+                {t("intro.dataStructure.connection")}
               </div>
               <div
                 style={{
@@ -1780,7 +1832,7 @@ export const IntroPage: React.FC = () => {
               >
                 user_id = "U001"
                 <br />
-                event = "{t('intro.dataStructure.exampleEvent')}"
+                event = "{t("intro.dataStructure.exampleEvent")}"
                 <br />
                 timestamp = "14:30:25"
               </p>
@@ -1795,7 +1847,7 @@ export const IntroPage: React.FC = () => {
                   display: "inline-block",
                 }}
               >
-                {t('intro.dataStructure.dynamicData')}
+                {t("intro.dataStructure.dynamicData")}
               </div>
             </div>
           </div>
@@ -1818,9 +1870,10 @@ export const IntroPage: React.FC = () => {
                 lineHeight: "1.5",
               }}
             >
-              💡 <strong>{t('intro.dataStructure.combinedPower')}</strong> {t('intro.dataStructure.combinedPowerDesc1')}
+              💡 <strong>{t("intro.dataStructure.combinedPower")}</strong>{" "}
+              {t("intro.dataStructure.combinedPowerDesc1")}
               <br />
-              <strong>{t('intro.dataStructure.combinedPowerDesc2')}</strong>
+              <strong>{t("intro.dataStructure.combinedPowerDesc2")}</strong>
             </p>
           </div>
         </div>
@@ -1851,7 +1904,7 @@ export const IntroPage: React.FC = () => {
           }}
         >
           <Settings size={28} style={{ color: "#3b82f6" }} />
-          {t('intro.dataStructure.userIdTitle')}
+          {t("intro.dataStructure.userIdTitle")}
         </h3>
 
         <p
@@ -1862,10 +1915,11 @@ export const IntroPage: React.FC = () => {
             marginBottom: "24px",
           }}
         >
-          {t('intro.dataStructure.userIdDescription')}{" "}
-          <strong>{t('intro.dataStructure.userIdDescription2')}</strong>{t('intro.dataStructure.userIdDescription3')}
+          {t("intro.dataStructure.userIdDescription")}{" "}
+          <strong>{t("intro.dataStructure.userIdDescription2")}</strong>
+          {t("intro.dataStructure.userIdDescription3")}
           <br />
-          {t('intro.dataStructure.userIdDescription4')}
+          {t("intro.dataStructure.userIdDescription4")}
         </p>
 
         <div
@@ -1878,34 +1932,46 @@ export const IntroPage: React.FC = () => {
         >
           {[
             {
-              title: t('intro.dataStructure.accountId.title'),
-              purpose: t('intro.dataStructure.accountId.purpose'),
-              desc: t('intro.dataStructure.accountId.desc'),
+              title: t("intro.dataStructure.accountId.title"),
+              purpose: t("intro.dataStructure.accountId.purpose"),
+              desc: t("intro.dataStructure.accountId.desc"),
               icon: "👤",
               color: "#3b82f6",
-              example: t('intro.dataStructure.accountId.example'),
-              when: t('intro.dataStructure.accountId.when'),
-              pros: [t('intro.dataStructure.accountId.pro1'), t('intro.dataStructure.accountId.pro2'), t('intro.dataStructure.accountId.pro3')],
+              example: t("intro.dataStructure.accountId.example"),
+              when: t("intro.dataStructure.accountId.when"),
+              pros: [
+                t("intro.dataStructure.accountId.pro1"),
+                t("intro.dataStructure.accountId.pro2"),
+                t("intro.dataStructure.accountId.pro3"),
+              ],
             },
             {
-              title: t('intro.dataStructure.distinctId.title'),
-              purpose: t('intro.dataStructure.distinctId.purpose'),
-              desc: t('intro.dataStructure.distinctId.desc'),
+              title: t("intro.dataStructure.distinctId.title"),
+              purpose: t("intro.dataStructure.distinctId.purpose"),
+              desc: t("intro.dataStructure.distinctId.desc"),
               icon: "🔍",
               color: "#10b981",
-              example: t('intro.dataStructure.distinctId.example'),
-              when: t('intro.dataStructure.distinctId.when'),
-              pros: [t('intro.dataStructure.distinctId.pro1'), t('intro.dataStructure.distinctId.pro2'), t('intro.dataStructure.distinctId.pro3')],
+              example: t("intro.dataStructure.distinctId.example"),
+              when: t("intro.dataStructure.distinctId.when"),
+              pros: [
+                t("intro.dataStructure.distinctId.pro1"),
+                t("intro.dataStructure.distinctId.pro2"),
+                t("intro.dataStructure.distinctId.pro3"),
+              ],
             },
             {
-              title: t('intro.dataStructure.userId.title'),
-              purpose: t('intro.dataStructure.userId.purpose'),
-              desc: t('intro.dataStructure.userId.desc'),
+              title: t("intro.dataStructure.userId.title"),
+              purpose: t("intro.dataStructure.userId.purpose"),
+              desc: t("intro.dataStructure.userId.desc"),
               icon: "🔐",
               color: "#f59e0b",
-              example: t('intro.dataStructure.userId.example'),
-              when: t('intro.dataStructure.userId.when'),
-              pros: [t('intro.dataStructure.userId.pro1'), t('intro.dataStructure.userId.pro2'), t('intro.dataStructure.userId.pro3')],
+              example: t("intro.dataStructure.userId.example"),
+              when: t("intro.dataStructure.userId.when"),
+              pros: [
+                t("intro.dataStructure.userId.pro1"),
+                t("intro.dataStructure.userId.pro2"),
+                t("intro.dataStructure.userId.pro3"),
+              ],
             },
           ].map((item, index) => (
             <div
@@ -2008,7 +2074,7 @@ export const IntroPage: React.FC = () => {
                     margin: "0 0 4px 0",
                   }}
                 >
-                  {t('intro.example')}
+                  {t("intro.example")}
                 </p>
                 <p
                   style={{
@@ -2046,7 +2112,7 @@ export const IntroPage: React.FC = () => {
                     fontWeight: "600",
                   }}
                 >
-                  {t('intro.dataStructure.usageTime')}: {item.when}
+                  {t("intro.dataStructure.usageTime")}: {item.when}
                 </span>
               </div>
 
@@ -2122,7 +2188,7 @@ export const IntroPage: React.FC = () => {
                 margin: 0,
               }}
             >
-              {t('intro.dataStructure.idFlowTitle')}
+              {t("intro.dataStructure.idFlowTitle")}
             </h4>
           </div>
 
@@ -2145,7 +2211,7 @@ export const IntroPage: React.FC = () => {
                   fontWeight: "600",
                 }}
               >
-                {t('intro.dataStructure.flow.step1')}
+                {t("intro.dataStructure.flow.step1")}
               </div>
               <div
                 style={{
@@ -2168,7 +2234,7 @@ export const IntroPage: React.FC = () => {
                   fontFamily: "monospace",
                 }}
               >
-                {t('intro.dataStructure.flow.label1')}
+                {t("intro.dataStructure.flow.label1")}
               </div>
             </div>
 
@@ -2187,7 +2253,7 @@ export const IntroPage: React.FC = () => {
                   fontWeight: "600",
                 }}
               >
-                {t('intro.dataStructure.flow.step2')}
+                {t("intro.dataStructure.flow.step2")}
               </div>
               <div
                 style={{
@@ -2200,7 +2266,7 @@ export const IntroPage: React.FC = () => {
                   fontFamily: "monospace",
                 }}
               >
-                {t('intro.dataStructure.idConnection')}
+                {t("intro.dataStructure.idConnection")}
               </div>
               <div
                 style={{
@@ -2209,7 +2275,7 @@ export const IntroPage: React.FC = () => {
                   marginTop: "4px",
                 }}
               >
-                {t('intro.dataStructure.flow.label2')}
+                {t("intro.dataStructure.flow.label2")}
               </div>
             </div>
 
@@ -2228,7 +2294,7 @@ export const IntroPage: React.FC = () => {
                   fontWeight: "600",
                 }}
               >
-                {t('intro.dataStructure.flow.step3')}
+                {t("intro.dataStructure.flow.step3")}
               </div>
               <div
                 style={{
@@ -2251,7 +2317,7 @@ export const IntroPage: React.FC = () => {
                   fontFamily: "monospace",
                 }}
               >
-                {t('intro.dataStructure.flow.label3')}
+                {t("intro.dataStructure.flow.label3")}
               </div>
             </div>
 
@@ -2270,7 +2336,7 @@ export const IntroPage: React.FC = () => {
                   fontWeight: "600",
                 }}
               >
-                {t('intro.dataStructure.flow.step4')}
+                {t("intro.dataStructure.flow.step4")}
               </div>
               <div
                 style={{
@@ -2293,7 +2359,7 @@ export const IntroPage: React.FC = () => {
                   fontFamily: "monospace",
                 }}
               >
-                {t('intro.dataStructure.flow.label4')}
+                {t("intro.dataStructure.flow.label4")}
               </div>
             </div>
           </div>
@@ -2329,7 +2395,7 @@ export const IntroPage: React.FC = () => {
                 lineHeight: "1.5",
               }}
             >
-              {t('intro.dataStructure.checkboxLabel')}
+              {t("intro.dataStructure.checkboxLabel")}
             </span>
           }
         />
@@ -2349,7 +2415,7 @@ export const IntroPage: React.FC = () => {
           textAlign: "center",
         }}
       >
-        {t('intro.trackingPolicy.title')}
+        {t("intro.trackingPolicy.title")}
       </h2>
 
       <p
@@ -2363,9 +2429,11 @@ export const IntroPage: React.FC = () => {
           margin: "0 auto 32px",
         }}
       >
-        {t('intro.trackingPolicy.subtitle')}{" "}
-        <strong style={{ color: theme.text }}>{t('intro.trackingPolicy.subtitleHighlight')}</strong>
-        {t('intro.trackingPolicy.subtitleEnd')}
+        {t("intro.trackingPolicy.subtitle")}{" "}
+        <strong style={{ color: theme.text }}>
+          {t("intro.trackingPolicy.subtitleHighlight")}
+        </strong>
+        {t("intro.trackingPolicy.subtitleEnd")}
       </p>
 
       {/* 트래킹 정책 개요 */}
@@ -2390,7 +2458,7 @@ export const IntroPage: React.FC = () => {
             marginBottom: "16px",
           }}
         >
-          {t('intro.trackingPolicy.overviewTitle')}
+          {t("intro.trackingPolicy.overviewTitle")}
         </h3>
         <p
           style={{
@@ -2402,9 +2470,12 @@ export const IntroPage: React.FC = () => {
             margin: "0 auto 24px",
           }}
         >
-          {t('intro.trackingPolicy.overviewDescription1')} <strong>{t('intro.trackingPolicy.overviewDescription2')}</strong>{" "}
-          <strong>{t('intro.trackingPolicy.overviewDescription3')}</strong>{t('intro.trackingPolicy.overviewDescription4')}
-          <br />{t('intro.trackingPolicy.overviewDescription5')}
+          {t("intro.trackingPolicy.overviewDescription1")}{" "}
+          <strong>{t("intro.trackingPolicy.overviewDescription2")}</strong>{" "}
+          <strong>{t("intro.trackingPolicy.overviewDescription3")}</strong>
+          {t("intro.trackingPolicy.overviewDescription4")}
+          <br />
+          {t("intro.trackingPolicy.overviewDescription5")}
         </p>
 
         <div
@@ -2418,20 +2489,20 @@ export const IntroPage: React.FC = () => {
           {[
             {
               icon: "🎯",
-              title: t('intro.trackingPolicy.principle1.title'),
-              desc: t('intro.trackingPolicy.principle1.desc'),
+              title: t("intro.trackingPolicy.principle1.title"),
+              desc: t("intro.trackingPolicy.principle1.desc"),
               color: "#06b6d4",
             },
             {
               icon: "📊",
-              title: t('intro.trackingPolicy.principle2.title'),
-              desc: t('intro.trackingPolicy.principle2.desc'),
+              title: t("intro.trackingPolicy.principle2.title"),
+              desc: t("intro.trackingPolicy.principle2.desc"),
               color: "#0891b2",
             },
             {
               icon: "🚀",
-              title: t('intro.trackingPolicy.principle3.title'),
-              desc: t('intro.trackingPolicy.principle3.desc'),
+              title: t("intro.trackingPolicy.principle3.title"),
+              desc: t("intro.trackingPolicy.principle3.desc"),
               color: "#0e7490",
             },
           ].map((principle, index) => (
@@ -2498,7 +2569,7 @@ export const IntroPage: React.FC = () => {
           }}
         >
           <Database size={28} style={{ color: "#06b6d4" }} />
-          {t('intro.trackingPolicy.eventTableTitle')}
+          {t("intro.trackingPolicy.eventTableTitle")}
         </h3>
 
         <p
@@ -2509,9 +2580,9 @@ export const IntroPage: React.FC = () => {
             marginBottom: "24px",
           }}
         >
-          {t('intro.trackingPolicy.eventTableDescription1')}
+          {t("intro.trackingPolicy.eventTableDescription1")}
           <br />
-          <strong>{t('intro.trackingPolicy.eventTableDescription2')}</strong>
+          <strong>{t("intro.trackingPolicy.eventTableDescription2")}</strong>
         </p>
 
         {/* 이벤트 카테고리 분류 */}
@@ -2528,7 +2599,7 @@ export const IntroPage: React.FC = () => {
               marginBottom: "16px",
             }}
           >
-            {t('intro.trackingPolicy.eventCategoryTitle')}
+            {t("intro.trackingPolicy.eventCategoryTitle")}
           </h4>
 
           <div
@@ -2541,43 +2612,53 @@ export const IntroPage: React.FC = () => {
           >
             {[
               {
-                category: t('intro.trackingPolicy.coreBusinessEvents.category'),
-                priority: t('intro.trackingPolicy.coreBusinessEvents.priority'),
+                category: t("intro.trackingPolicy.coreBusinessEvents.category"),
+                priority: t("intro.trackingPolicy.coreBusinessEvents.priority"),
                 color: "#ef4444",
                 bgColor: "rgba(239, 68, 68, 0.1)",
                 events: [
-                  t('intro.trackingPolicy.event.purchase'),
-                  t('intro.trackingPolicy.event.subscribe'),
-                  t('intro.trackingPolicy.event.signup'),
-                  t('intro.trackingPolicy.event.firstPurchase'),
+                  t("intro.trackingPolicy.event.purchase"),
+                  t("intro.trackingPolicy.event.subscribe"),
+                  t("intro.trackingPolicy.event.signup"),
+                  t("intro.trackingPolicy.event.firstPurchase"),
                 ],
-                description: t('intro.trackingPolicy.coreBusinessEvents.description'),
+                description: t(
+                  "intro.trackingPolicy.coreBusinessEvents.description"
+                ),
               },
               {
-                category: t('intro.trackingPolicy.engagementEvents.category'),
-                priority: t('intro.trackingPolicy.engagementEvents.priority'),
+                category: t("intro.trackingPolicy.engagementEvents.category"),
+                priority: t("intro.trackingPolicy.engagementEvents.priority"),
                 color: "#3b82f6",
                 bgColor: "rgba(59, 130, 246, 0.1)",
                 events: [
-                  t('intro.trackingPolicy.event.login'),
-                  t('intro.trackingPolicy.event.orderMilestone'),
-                  t('intro.trackingPolicy.event.restaurantSearched'),
-                  t('intro.trackingPolicy.event.appOnboarding'),
+                  t("intro.trackingPolicy.event.login"),
+                  t("intro.trackingPolicy.event.orderMilestone"),
+                  t("intro.trackingPolicy.event.restaurantSearched"),
+                  t("intro.trackingPolicy.event.appOnboarding"),
                 ],
-                description: t('intro.trackingPolicy.engagementEvents.description'),
+                description: t(
+                  "intro.trackingPolicy.engagementEvents.description"
+                ),
               },
               {
-                category: t('intro.trackingPolicy.tabletOptimizationEvents.category'),
-                priority: t('intro.trackingPolicy.tabletOptimizationEvents.priority'),
+                category: t(
+                  "intro.trackingPolicy.tabletOptimizationEvents.category"
+                ),
+                priority: t(
+                  "intro.trackingPolicy.tabletOptimizationEvents.priority"
+                ),
                 color: "#10b981",
                 bgColor: "rgba(16, 185, 129, 0.1)",
                 events: [
-                  t('intro.trackingPolicy.event.pageView'),
-                  t('intro.trackingPolicy.event.search'),
-                  t('intro.trackingPolicy.event.buttonClick'),
-                  t('intro.trackingPolicy.event.itemView'),
+                  t("intro.trackingPolicy.event.pageView"),
+                  t("intro.trackingPolicy.event.search"),
+                  t("intro.trackingPolicy.event.buttonClick"),
+                  t("intro.trackingPolicy.event.itemView"),
                 ],
-                description: t('intro.trackingPolicy.tabletOptimizationEvents.description'),
+                description: t(
+                  "intro.trackingPolicy.tabletOptimizationEvents.description"
+                ),
               },
             ].map((eventGroup, index) => (
               <div
@@ -2689,7 +2770,7 @@ export const IntroPage: React.FC = () => {
               textAlign: "center",
             }}
           >
-            {t('intro.trackingPolicy.eventTableExampleTitle')}
+            {t("intro.trackingPolicy.eventTableExampleTitle")}
           </h4>
 
           <div
@@ -2718,7 +2799,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.eventName')}
+                    {t("intro.trackingPolicy.eventName")}
                   </th>
                   <th
                     style={{
@@ -2728,7 +2809,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-{t('intro.trackingPolicy.eventAlias')}
+                    {t("intro.trackingPolicy.eventAlias")}
                   </th>
                   <th
                     style={{
@@ -2738,7 +2819,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.eventDescription')}
+                    {t("intro.trackingPolicy.eventDescription")}
                   </th>
                   <th
                     style={{
@@ -2748,7 +2829,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-{t('intro.trackingPolicy.eventTag')}
+                    {t("intro.trackingPolicy.eventTag")}
                   </th>
                   <th
                     style={{
@@ -2758,7 +2839,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.propertyType')}
+                    {t("intro.trackingPolicy.propertyType")}
                   </th>
                   <th
                     style={{
@@ -2768,7 +2849,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.propertyDataType')}
+                    {t("intro.trackingPolicy.propertyDataType")}
                   </th>
                   <th
                     style={{
@@ -2778,7 +2859,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.propertyDetailType')}
+                    {t("intro.trackingPolicy.propertyDetailType")}
                   </th>
                 </tr>
               </thead>
@@ -2786,123 +2867,131 @@ export const IntroPage: React.FC = () => {
                 {[
                   {
                     event: "order_completed",
-                    alias: t('intro.trackingPolicy.eventAlias.orderCompleted'),
-                    desc: t('intro.trackingPolicy.eventDesc.orderCompleted'),
+                    alias: t("intro.trackingPolicy.eventAlias.orderCompleted"),
+                    desc: t("intro.trackingPolicy.eventDesc.orderCompleted"),
                     tag: "revenue",
                     properties: [
                       {
                         name: "order_id",
                         type: "string",
-                        desc: t('intro.trackingPolicy.property.orderId'),
+                        desc: t("intro.trackingPolicy.property.orderId"),
                       },
                       {
                         name: "restaurant_id",
                         type: "string",
-                        desc: t('intro.trackingPolicy.property.restaurantId'),
+                        desc: t("intro.trackingPolicy.property.restaurantId"),
                       },
                       {
                         name: "order_amount",
                         type: "number",
-                        desc: t('intro.trackingPolicy.property.orderAmount'),
+                        desc: t("intro.trackingPolicy.property.orderAmount"),
                       },
                       {
                         name: "food_category",
                         type: "string",
-                        desc: t('intro.trackingPolicy.property.foodCategory'),
+                        desc: t("intro.trackingPolicy.property.foodCategory"),
                       },
                       {
                         name: "payment_method",
                         type: "string",
-                        desc: t('intro.trackingPolicy.property.paymentMethod'),
+                        desc: t("intro.trackingPolicy.property.paymentMethod"),
                       },
                     ],
                   },
                   {
                     event: "restaurant_searched",
-                    alias: t('intro.trackingPolicy.eventAlias.restaurantSearched'),
-                    desc: t('intro.trackingPolicy.eventDesc.restaurantSearched'),
+                    alias: t(
+                      "intro.trackingPolicy.eventAlias.restaurantSearched"
+                    ),
+                    desc: t(
+                      "intro.trackingPolicy.eventDesc.restaurantSearched"
+                    ),
                     tag: "engagement",
                     properties: [
                       {
                         name: "search_keyword",
                         type: "string",
-                        desc: t('intro.trackingPolicy.property.searchKeyword'),
+                        desc: t("intro.trackingPolicy.property.searchKeyword"),
                       },
                       {
                         name: "search_type",
                         type: "string",
-                        desc: t('intro.trackingPolicy.property.searchType'),
+                        desc: t("intro.trackingPolicy.property.searchType"),
                       },
                       {
                         name: "result_count",
                         type: "number",
-                        desc: t('intro.trackingPolicy.property.resultCount'),
+                        desc: t("intro.trackingPolicy.property.resultCount"),
                       },
                       {
                         name: "search_location",
                         type: "string",
-                        desc: t('intro.trackingPolicy.property.searchLocation'),
+                        desc: t("intro.trackingPolicy.property.searchLocation"),
                       },
                       {
                         name: "search_filters",
                         type: "string",
-                        desc: t('intro.trackingPolicy.property.searchFilters'),
+                        desc: t("intro.trackingPolicy.property.searchFilters"),
                       },
                     ],
                   },
                   {
                     event: "order_milestone_achieved",
-                    alias: t('intro.trackingPolicy.eventAlias.orderMilestone'),
-                    desc: t('intro.trackingPolicy.eventDesc.orderMilestone'),
+                    alias: t("intro.trackingPolicy.eventAlias.orderMilestone"),
+                    desc: t("intro.trackingPolicy.eventDesc.orderMilestone"),
                     tag: "progression",
                     properties: [
                       {
                         name: "milestone_count",
                         type: "number",
-                        desc: t('intro.trackingPolicy.property.milestoneCount'),
+                        desc: t("intro.trackingPolicy.property.milestoneCount"),
                       },
                       {
                         name: "member_level",
                         type: "string",
-                        desc: t('intro.trackingPolicy.property.memberLevel'),
+                        desc: t("intro.trackingPolicy.property.memberLevel"),
                       },
                       {
                         name: "total_spent",
                         type: "number",
-                        desc: t('intro.trackingPolicy.property.totalSpent'),
+                        desc: t("intro.trackingPolicy.property.totalSpent"),
                       },
                       {
                         name: "signup_days",
                         type: "number",
-                        desc: t('intro.trackingPolicy.property.signupDays'),
+                        desc: t("intro.trackingPolicy.property.signupDays"),
                       },
                     ],
                   },
                   {
                     event: "app_onboarding_completed",
-                    alias: t('intro.trackingPolicy.eventAlias.appOnboarding'),
-                    desc: t('intro.trackingPolicy.eventDesc.appOnboarding'),
+                    alias: t("intro.trackingPolicy.eventAlias.appOnboarding"),
+                    desc: t("intro.trackingPolicy.eventDesc.appOnboarding"),
                     tag: "onboarding",
                     properties: [
                       {
                         name: "onboarding_duration",
                         type: "number",
-                        desc: t('intro.trackingPolicy.property.completionTime'),
+                        desc: t("intro.trackingPolicy.property.completionTime"),
                       },
                       {
                         name: "steps_completed",
                         type: "number",
-                        desc: t('intro.trackingPolicy.property.completedSteps'),
+                        desc: t("intro.trackingPolicy.property.completedSteps"),
                       },
                       {
                         name: "location_permission_granted",
                         type: "boolean",
-                        desc: t('intro.trackingPolicy.property.locationPermission'),
+                        desc: t(
+                          "intro.trackingPolicy.property.locationPermission"
+                        ),
                       },
                       {
                         name: "notification_permission_granted",
                         type: "boolean",
-                        desc: t('intro.trackingPolicy.property.notificationPermission'),
+                        desc: t(
+                          "intro.trackingPolicy.property.notificationPermission"
+                        ),
                       },
                     ],
                   },
@@ -3056,7 +3145,7 @@ export const IntroPage: React.FC = () => {
           }}
         >
           <Settings size={28} style={{ color: "#8b5cf6" }} />
-          {t('intro.trackingPolicy.userTableTitle')}
+          {t("intro.trackingPolicy.userTableTitle")}
         </h3>
 
         <p
@@ -3067,10 +3156,11 @@ export const IntroPage: React.FC = () => {
             marginBottom: "24px",
           }}
         >
-          {t('intro.trackingPolicy.userStateManagement')}
+          {t("intro.trackingPolicy.userStateManagement")}
           <br />
-          <strong>{t('intro.trackingPolicy.updateMethod')}</strong>{t('intro.trackingPolicy.updateMethodDescription')}
-          {t('intro.trackingPolicy.updateMethodImportance')}
+          <strong>{t("intro.trackingPolicy.updateMethod")}</strong>
+          {t("intro.trackingPolicy.updateMethodDescription")}
+          {t("intro.trackingPolicy.updateMethodImportance")}
         </p>
 
         {/* 업데이트 방식 설명 */}
@@ -3087,7 +3177,7 @@ export const IntroPage: React.FC = () => {
               marginBottom: "16px",
             }}
           >
-            {t('intro.trackingPolicy.userUpdateTypes.title')}
+            {t("intro.trackingPolicy.userUpdateTypes.title")}
           </h4>
 
           <div
@@ -3100,12 +3190,12 @@ export const IntroPage: React.FC = () => {
           >
             {[
               {
-                method: t('intro.trackingPolicy.fixed.title'),
+                method: t("intro.trackingPolicy.fixed.title"),
                 color: "#ef4444",
                 bgColor: "rgba(239, 68, 68, 0.1)",
                 icon: "🔒",
-                description: t('intro.trackingPolicy.fixed.desc'),
-                use_case: t('intro.trackingPolicy.fixed.example'),
+                description: t("intro.trackingPolicy.fixed.desc"),
+                use_case: t("intro.trackingPolicy.fixed.example"),
                 examples: [
                   "reg_date: 2024-01-15",
                   "acquisition_channel: google_ads",
@@ -3114,12 +3204,12 @@ export const IntroPage: React.FC = () => {
                 ],
               },
               {
-                method: t('intro.trackingPolicy.latest.title'),
+                method: t("intro.trackingPolicy.latest.title"),
                 color: "#3b82f6",
                 bgColor: "rgba(59, 130, 246, 0.1)",
                 icon: "🔄",
-                description: t('intro.trackingPolicy.latest.desc'),
-                use_case: t('intro.trackingPolicy.latest.example'),
+                description: t("intro.trackingPolicy.latest.desc"),
+                use_case: t("intro.trackingPolicy.latest.example"),
                 examples: [
                   "current_level: 25 → 26",
                   "last_login: 2024-03-14",
@@ -3128,16 +3218,18 @@ export const IntroPage: React.FC = () => {
                 ],
               },
               {
-                method: t('intro.trackingPolicy.cumulative.title'),
+                method: t("intro.trackingPolicy.cumulative.title"),
                 color: "#10b981",
                 bgColor: "rgba(16, 185, 129, 0.1)",
                 icon: "➕",
-                description: t('intro.trackingPolicy.cumulative.desc'),
-                use_case: t('intro.trackingPolicy.cumulative.example'),
+                description: t("intro.trackingPolicy.cumulative.desc"),
+                use_case: t("intro.trackingPolicy.cumulative.example"),
                 examples: [
                   "total_revenue: 30000 + 5000 = 35000",
                   "login_count: 45 + 1 = 46",
-                  `total_playtime: 120 + 30 = 150${t('intro.trackingPolicy.minutes')}`,
+                  `total_playtime: 120 + 30 = 150${t(
+                    "intro.trackingPolicy.minutes"
+                  )}`,
                   "battle_wins: 28 + 1 = 29",
                 ],
               },
@@ -3225,7 +3317,7 @@ export const IntroPage: React.FC = () => {
                       marginBottom: "6px",
                     }}
                   >
-{t('intro.trackingPolicy.useCaseLabel')}
+                    {t("intro.trackingPolicy.useCaseLabel")}
                   </div>
                   <p
                     style={{
@@ -3248,7 +3340,7 @@ export const IntroPage: React.FC = () => {
                       marginBottom: "8px",
                     }}
                   >
-{t('intro.trackingPolicy.exampleLabel')}
+                    {t("intro.trackingPolicy.exampleLabel")}
                   </div>
                   {updateMethod.examples.map((example, idx) => (
                     <div
@@ -3293,7 +3385,7 @@ export const IntroPage: React.FC = () => {
               textAlign: "center",
             }}
           >
-            {t('intro.trackingPolicy.userTableExampleTitle')}
+            {t("intro.trackingPolicy.userTableExampleTitle")}
           </h4>
 
           <div
@@ -3322,7 +3414,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.propertyType')}
+                    {t("intro.trackingPolicy.propertyType")}
                   </th>
                   <th
                     style={{
@@ -3332,7 +3424,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-{t('intro.trackingPolicy.propertyAlias')}
+                    {t("intro.trackingPolicy.propertyAlias")}
                   </th>
                   <th
                     style={{
@@ -3342,7 +3434,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.propertyDataType')}
+                    {t("intro.trackingPolicy.propertyDataType")}
                   </th>
                   <th
                     style={{
@@ -3352,7 +3444,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-{t('intro.trackingPolicy.updateMethod')}
+                    {t("intro.trackingPolicy.updateMethod")}
                   </th>
                   <th
                     style={{
@@ -3362,7 +3454,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.propertyDetailType')}
+                    {t("intro.trackingPolicy.propertyDetailType")}
                   </th>
                   <th
                     style={{
@@ -3372,7 +3464,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-{t('intro.trackingPolicy.propertyTag')}
+                    {t("intro.trackingPolicy.propertyTag")}
                   </th>
                 </tr>
               </thead>
@@ -3381,138 +3473,138 @@ export const IntroPage: React.FC = () => {
                   // 고정값 속성
                   {
                     name: "reg_date",
-                    alias: t('intro.trackingPolicy.regDate'),
+                    alias: t("intro.trackingPolicy.regDate"),
                     type: "date",
-                    method: t('intro.trackingPolicy.fixed.title'),
-                    desc: t('intro.trackingPolicy.regDateDesc'),
+                    method: t("intro.trackingPolicy.fixed.title"),
+                    desc: t("intro.trackingPolicy.regDateDesc"),
                     tag: "identity",
                     color: "#ef4444",
                   },
                   {
                     name: "first_country",
-                    alias: t('intro.trackingPolicy.firstCountry'),
+                    alias: t("intro.trackingPolicy.firstCountry"),
                     type: "string",
-                    method: t('intro.trackingPolicy.fixed.title'),
-                    desc: t('intro.trackingPolicy.firstCountryDesc'),
+                    method: t("intro.trackingPolicy.fixed.title"),
+                    desc: t("intro.trackingPolicy.firstCountryDesc"),
                     tag: "identity",
                     color: "#ef4444",
                   },
                   {
                     name: "acquisition_channel",
-                    alias: t('intro.trackingPolicy.acquisitionChannel'),
+                    alias: t("intro.trackingPolicy.acquisitionChannel"),
                     type: "string",
-                    method: t('intro.trackingPolicy.fixed.title'),
-                    desc: t('intro.trackingPolicy.acquisitionChannelDesc'),
+                    method: t("intro.trackingPolicy.fixed.title"),
+                    desc: t("intro.trackingPolicy.acquisitionChannelDesc"),
                     tag: "acquisition",
                     color: "#ef4444",
                   },
                   {
                     name: "first_purchase_date",
-                    alias: t('intro.trackingPolicy.firstPurchaseDate'),
+                    alias: t("intro.trackingPolicy.firstPurchaseDate"),
                     type: "date",
-                    method: t('intro.trackingPolicy.fixed.title'),
-                    desc: t('intro.trackingPolicy.firstPurchaseDateDesc'),
+                    method: t("intro.trackingPolicy.fixed.title"),
+                    desc: t("intro.trackingPolicy.firstPurchaseDateDesc"),
                     tag: "monetization",
                     color: "#ef4444",
                   },
                   // 최신값 속성
                   {
                     name: "current_level",
-                    alias: t('intro.trackingPolicy.currentLevel'),
+                    alias: t("intro.trackingPolicy.currentLevel"),
                     type: "number",
-                    method: t('intro.trackingPolicy.latest.title'),
-                    desc: t('intro.trackingPolicy.currentLevelDesc'),
+                    method: t("intro.trackingPolicy.latest.title"),
+                    desc: t("intro.trackingPolicy.currentLevelDesc"),
                     tag: "progression",
                     color: "#3b82f6",
                   },
                   {
                     name: "last_login",
-                    alias: t('intro.trackingPolicy.lastLogin'),
+                    alias: t("intro.trackingPolicy.lastLogin"),
                     type: "datetime",
-                    method: t('intro.trackingPolicy.latest.title'),
-                    desc: t('intro.trackingPolicy.lastLoginDesc'),
+                    method: t("intro.trackingPolicy.latest.title"),
+                    desc: t("intro.trackingPolicy.lastLoginDesc"),
                     tag: "engagement",
                     color: "#3b82f6",
                   },
                   {
                     name: "vip_status",
-                    alias: t('intro.trackingPolicy.vipStatus'),
+                    alias: t("intro.trackingPolicy.vipStatus"),
                     type: "string",
-                    method: t('intro.trackingPolicy.latest.title'),
-                    desc: t('intro.trackingPolicy.vipStatusDesc'),
+                    method: t("intro.trackingPolicy.latest.title"),
+                    desc: t("intro.trackingPolicy.vipStatusDesc"),
                     tag: "monetization",
                     color: "#3b82f6",
                   },
                   {
                     name: "last_item_purchased",
-                    alias: t('intro.trackingPolicy.lastItemPurchased'),
+                    alias: t("intro.trackingPolicy.lastItemPurchased"),
                     type: "string",
-                    method: t('intro.trackingPolicy.latest.title'),
-                    desc: t('intro.trackingPolicy.lastItemPurchasedDesc'),
+                    method: t("intro.trackingPolicy.latest.title"),
+                    desc: t("intro.trackingPolicy.lastItemPurchasedDesc"),
                     tag: "monetization",
                     color: "#3b82f6",
                   },
                   {
                     name: "current_stage",
-                    alias: t('intro.trackingPolicy.currentStage'),
+                    alias: t("intro.trackingPolicy.currentStage"),
                     type: "string",
-                    method: t('intro.trackingPolicy.latest.title'),
-                    desc: t('intro.trackingPolicy.currentStageDesc'),
+                    method: t("intro.trackingPolicy.latest.title"),
+                    desc: t("intro.trackingPolicy.currentStageDesc"),
                     tag: "progression",
                     color: "#3b82f6",
                   },
                   // 누적값 속성
                   {
                     name: "total_revenue",
-                    alias: t('intro.trackingPolicy.totalRevenue'),
+                    alias: t("intro.trackingPolicy.totalRevenue"),
                     type: "number",
-                    method: t('intro.trackingPolicy.cumulative.title'),
-                    desc: t('intro.trackingPolicy.totalRevenueDesc'),
+                    method: t("intro.trackingPolicy.cumulative.title"),
+                    desc: t("intro.trackingPolicy.totalRevenueDesc"),
                     tag: "monetization",
                     color: "#10b981",
                   },
                   {
                     name: "login_count",
-                    alias: t('intro.trackingPolicy.loginCount'),
+                    alias: t("intro.trackingPolicy.loginCount"),
                     type: "number",
-                    method: t('intro.trackingPolicy.cumulative.title'),
-                    desc: t('intro.trackingPolicy.loginCountDesc'),
+                    method: t("intro.trackingPolicy.cumulative.title"),
+                    desc: t("intro.trackingPolicy.loginCountDesc"),
                     tag: "engagement",
                     color: "#10b981",
                   },
                   {
                     name: "total_playtime",
-                    alias: t('intro.trackingPolicy.totalPlaytime'),
+                    alias: t("intro.trackingPolicy.totalPlaytime"),
                     type: "number",
-                    method: t('intro.trackingPolicy.cumulative.title'),
-                    desc: t('intro.trackingPolicy.totalPlaytimeDesc'),
+                    method: t("intro.trackingPolicy.cumulative.title"),
+                    desc: t("intro.trackingPolicy.totalPlaytimeDesc"),
                     tag: "engagement",
                     color: "#10b981",
                   },
                   {
                     name: "battle_wins",
-                    alias: t('intro.trackingPolicy.battleWins'),
+                    alias: t("intro.trackingPolicy.battleWins"),
                     type: "number",
-                    method: t('intro.trackingPolicy.cumulative.title'),
-                    desc: t('intro.trackingPolicy.battleWinsDesc'),
+                    method: t("intro.trackingPolicy.cumulative.title"),
+                    desc: t("intro.trackingPolicy.battleWinsDesc"),
                     tag: "progression",
                     color: "#10b981",
                   },
                   {
                     name: "items_purchased",
-                    alias: t('intro.trackingPolicy.itemsPurchased'),
+                    alias: t("intro.trackingPolicy.itemsPurchased"),
                     type: "number",
-                    method: t('intro.trackingPolicy.cumulative.title'),
-                    desc: t('intro.trackingPolicy.itemsPurchasedDesc'),
+                    method: t("intro.trackingPolicy.cumulative.title"),
+                    desc: t("intro.trackingPolicy.itemsPurchasedDesc"),
                     tag: "monetization",
                     color: "#10b981",
                   },
                   {
                     name: "friends_invited",
-                    alias: t('intro.trackingPolicy.friendInviteAlias'),
+                    alias: t("intro.trackingPolicy.friendInviteAlias"),
                     type: "number",
-                    method: t('intro.trackingPolicy.cumulativeValue'),
-                    desc: t('intro.trackingPolicy.friendInviteDesc'),
+                    method: t("intro.trackingPolicy.cumulativeValue"),
+                    desc: t("intro.trackingPolicy.friendInviteDesc"),
                     tag: "social",
                     color: "#10b981",
                   },
@@ -3652,7 +3744,7 @@ export const IntroPage: React.FC = () => {
           }}
         >
           <Star size={28} style={{ color: "#f59e0b" }} />
-          {t('intro.trackingPolicy.commonPropertiesTitle')}
+          {t("intro.trackingPolicy.commonPropertiesTitle")}
         </h3>
 
         <p
@@ -3663,9 +3755,9 @@ export const IntroPage: React.FC = () => {
             marginBottom: "24px",
           }}
         >
-{t('intro.trackingPolicy.commonPropertiesDescription')}
+          {t("intro.trackingPolicy.commonPropertiesDescription")}
           <br />
-          {t('intro.trackingPolicy.deviceInfoDescription')}
+          {t("intro.trackingPolicy.deviceInfoDescription")}
         </p>
 
         {/* 공통 속성 카테고리별 분류 */}
@@ -3679,41 +3771,68 @@ export const IntroPage: React.FC = () => {
         >
           {[
             {
-              category: t('intro.trackingPolicy.deviceEnvironmentInfo'),
+              category: t("intro.trackingPolicy.deviceEnvironmentInfo"),
               color: "#f59e0b",
               icon: "📱",
-              description: t('intro.trackingPolicy.deviceAutoCollection'),
+              description: t("intro.trackingPolicy.deviceAutoCollection"),
               properties: [
                 { name: "platform", desc: "iOS, Android, Web" },
-                { name: "app_version", desc: t('intro.trackingPolicy.appVersionExample') },
-                { name: "os_version", desc: t('intro.trackingPolicy.osVersion') },
-                { name: "device_model", desc: t('intro.trackingPolicy.deviceModel') },
-                { name: "screen_resolution", desc: t('intro.trackingPolicy.screenResolution') },
-                { name: "network_type", desc: t('intro.trackingPolicy.networkType') },
+                {
+                  name: "app_version",
+                  desc: t("intro.trackingPolicy.appVersionExample"),
+                },
+                {
+                  name: "os_version",
+                  desc: t("intro.trackingPolicy.osVersion"),
+                },
+                {
+                  name: "device_model",
+                  desc: t("intro.trackingPolicy.deviceModel"),
+                },
+                {
+                  name: "screen_resolution",
+                  desc: t("intro.trackingPolicy.screenResolution"),
+                },
+                {
+                  name: "network_type",
+                  desc: t("intro.trackingPolicy.networkType"),
+                },
               ],
             },
             {
-              category: t('intro.trackingPolicy.regionLanguageInfo'),
+              category: t("intro.trackingPolicy.regionLanguageInfo"),
               color: "#06b6d4",
               icon: "🌍",
-              description: t('intro.trackingPolicy.regionLanguageInfoDesc'),
+              description: t("intro.trackingPolicy.regionLanguageInfoDesc"),
               properties: [
-                { name: "country", desc: t('intro.trackingPolicy.country') },
-                { name: "language", desc: t('intro.trackingPolicy.language') },
-                { name: "city", desc: t('intro.trackingPolicy.city') },
-                { name: "ip_address", desc: t('intro.trackingPolicy.ipAddress') },
+                { name: "country", desc: t("intro.trackingPolicy.country") },
+                { name: "language", desc: t("intro.trackingPolicy.language") },
+                { name: "city", desc: t("intro.trackingPolicy.city") },
+                {
+                  name: "ip_address",
+                  desc: t("intro.trackingPolicy.ipAddress"),
+                },
               ],
             },
             {
-              category: t('intro.trackingPolicy.systemSdkInfo'),
+              category: t("intro.trackingPolicy.systemSdkInfo"),
               color: "#10b981",
               icon: "⚙️",
-              description: t('intro.trackingPolicy.sdkSystemInfo'),
+              description: t("intro.trackingPolicy.sdkSystemInfo"),
               properties: [
-                { name: "lib_version", desc: t('intro.trackingPolicy.sdkVersion') },
-                { name: "lib_name", desc: t('intro.trackingPolicy.sdkName') },
-                { name: "data_source", desc: t('intro.trackingPolicy.dataSource') },
-                { name: "install_id", desc: t('intro.trackingPolicy.installId') },
+                {
+                  name: "lib_version",
+                  desc: t("intro.trackingPolicy.sdkVersion"),
+                },
+                { name: "lib_name", desc: t("intro.trackingPolicy.sdkName") },
+                {
+                  name: "data_source",
+                  desc: t("intro.trackingPolicy.dataSource"),
+                },
+                {
+                  name: "install_id",
+                  desc: t("intro.trackingPolicy.installId"),
+                },
               ],
             },
           ].map((commonGroup, index) => (
@@ -3869,7 +3988,7 @@ export const IntroPage: React.FC = () => {
               textAlign: "center",
             }}
           >
-            {t('intro.trackingPolicy.commonPropertiesExampleTitle')}
+            {t("intro.trackingPolicy.commonPropertiesExampleTitle")}
           </h4>
 
           <div
@@ -3897,7 +4016,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.propertyType')}
+                    {t("intro.trackingPolicy.propertyType")}
                   </th>
                   <th
                     style={{
@@ -3907,7 +4026,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-{t('intro.trackingPolicy.propertyAlias')}
+                    {t("intro.trackingPolicy.propertyAlias")}
                   </th>
                   <th
                     style={{
@@ -3917,7 +4036,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.propertyDataType')}
+                    {t("intro.trackingPolicy.propertyDataType")}
                   </th>
                   <th
                     style={{
@@ -3927,7 +4046,7 @@ export const IntroPage: React.FC = () => {
                       fontWeight: "700",
                     }}
                   >
-                    {t('intro.trackingPolicy.propertyDetailType')}
+                    {t("intro.trackingPolicy.propertyDetailType")}
                   </th>
                 </tr>
               </thead>
@@ -3935,111 +4054,111 @@ export const IntroPage: React.FC = () => {
                 {[
                   {
                     name: "platform",
-                    alias: t('intro.trackingPolicy.platform'),
+                    alias: t("intro.trackingPolicy.platform"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.platformDesc'),
+                    desc: t("intro.trackingPolicy.platformDesc"),
                   },
                   {
                     name: "app_version",
-                    alias: t('intro.trackingPolicy.appVersion'),
+                    alias: t("intro.trackingPolicy.appVersion"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.appVersionDesc'),
+                    desc: t("intro.trackingPolicy.appVersionDesc"),
                   },
                   {
                     name: "os_version",
-                    alias: t('intro.trackingPolicy.osVersionAlias'),
+                    alias: t("intro.trackingPolicy.osVersionAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.osVersionDesc'),
+                    desc: t("intro.trackingPolicy.osVersionDesc"),
                   },
                   {
                     name: "device_model",
-                    alias: t('intro.trackingPolicy.deviceModelAlias'),
+                    alias: t("intro.trackingPolicy.deviceModelAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.deviceModelDesc'),
+                    desc: t("intro.trackingPolicy.deviceModelDesc"),
                   },
                   {
                     name: "screen_resolution",
-                    alias: t('intro.trackingPolicy.screenResolutionAlias'),
+                    alias: t("intro.trackingPolicy.screenResolutionAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.screenResolutionDesc'),
+                    desc: t("intro.trackingPolicy.screenResolutionDesc"),
                   },
                   {
                     name: "network_type",
-                    alias: t('intro.trackingPolicy.networkTypeAlias'),
+                    alias: t("intro.trackingPolicy.networkTypeAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.networkTypeDesc'),
+                    desc: t("intro.trackingPolicy.networkTypeDesc"),
                   },
                   {
                     name: "session_id",
-                    alias: t('intro.trackingPolicy.sessionIdAlias'),
+                    alias: t("intro.trackingPolicy.sessionIdAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.sessionIdDesc'),
+                    desc: t("intro.trackingPolicy.sessionIdDesc"),
                   },
                   {
                     name: "session_duration",
-                    alias: t('intro.trackingPolicy.sessionDurationAlias'),
+                    alias: t("intro.trackingPolicy.sessionDurationAlias"),
                     type: "number",
-                    desc: t('intro.trackingPolicy.sessionDurationDesc'),
+                    desc: t("intro.trackingPolicy.sessionDurationDesc"),
                   },
                   {
                     name: "timestamp",
-                    alias: t('intro.trackingPolicy.timestampAlias'),
+                    alias: t("intro.trackingPolicy.timestampAlias"),
                     type: "datetime",
-                    desc: t('intro.trackingPolicy.timestampDesc'),
+                    desc: t("intro.trackingPolicy.timestampDesc"),
                   },
                   {
                     name: "timezone",
-                    alias: t('intro.trackingPolicy.timezoneAlias'),
+                    alias: t("intro.trackingPolicy.timezoneAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.timezoneDesc'),
+                    desc: t("intro.trackingPolicy.timezoneDesc"),
                   },
                   {
                     name: "country",
-                    alias: t('intro.trackingPolicy.countryAlias'),
+                    alias: t("intro.trackingPolicy.countryAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.countryDesc'),
+                    desc: t("intro.trackingPolicy.countryDesc"),
                   },
                   {
                     name: "language",
-                    alias: t('intro.trackingPolicy.languageAlias'),
+                    alias: t("intro.trackingPolicy.languageAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.languageDesc'),
+                    desc: t("intro.trackingPolicy.languageDesc"),
                   },
                   {
                     name: "city",
-                    alias: t('intro.trackingPolicy.cityAlias'),
+                    alias: t("intro.trackingPolicy.cityAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.cityDesc'),
+                    desc: t("intro.trackingPolicy.cityDesc"),
                   },
                   {
                     name: "ip_address",
-                    alias: t('intro.trackingPolicy.ipAddressAlias'),
+                    alias: t("intro.trackingPolicy.ipAddressAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.ipAddressDesc'),
+                    desc: t("intro.trackingPolicy.ipAddressDesc"),
                   },
                   {
                     name: "lib_version",
-                    alias: t('intro.trackingPolicy.libVersionAlias'),
+                    alias: t("intro.trackingPolicy.libVersionAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.libVersionDesc'),
+                    desc: t("intro.trackingPolicy.libVersionDesc"),
                   },
                   {
                     name: "lib_name",
-                    alias: t('intro.trackingPolicy.libNameAlias'),
+                    alias: t("intro.trackingPolicy.libNameAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.libNameDesc'),
+                    desc: t("intro.trackingPolicy.libNameDesc"),
                   },
                   {
                     name: "data_source",
-                    alias: t('intro.trackingPolicy.dataSourceAlias'),
+                    alias: t("intro.trackingPolicy.dataSourceAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.dataSourceDesc'),
+                    desc: t("intro.trackingPolicy.dataSourceDesc"),
                   },
                   {
                     name: "install_id",
-                    alias: t('intro.trackingPolicy.installIdAlias'),
+                    alias: t("intro.trackingPolicy.installIdAlias"),
                     type: "string",
-                    desc: t('intro.trackingPolicy.installIdDesc'),
+                    desc: t("intro.trackingPolicy.installIdDesc"),
                   },
                 ].map((commonProp, index) => (
                   <tr
@@ -4135,7 +4254,7 @@ export const IntroPage: React.FC = () => {
               }}
             >
               <AlertTriangle size={20} />
-              {t('intro.trackingPolicy.systemLimitations')}
+              {t("intro.trackingPolicy.systemLimitations")}
             </h5>
             <div
               style={{
@@ -4145,10 +4264,18 @@ export const IntroPage: React.FC = () => {
               }}
             >
               {[
-                `${t('intro.trackingPolicy.eventTypes')} 500${t('intro.trackingPolicy.countUnit')}`,
-                `${t('intro.trackingPolicy.eventProperties')} 1,000${t('intro.trackingPolicy.countUnit')}`,
-                `${t('intro.trackingPolicy.userProperties')} 500${t('intro.trackingPolicy.countUnit')}`,
-                `${t('intro.trackingPolicy.virtualProperties')} 3,000${t('intro.trackingPolicy.countUnit')}`,
+                `${t("intro.trackingPolicy.eventTypes")} 500${t(
+                  "intro.trackingPolicy.countUnit"
+                )}`,
+                `${t("intro.trackingPolicy.eventProperties")} 1,000${t(
+                  "intro.trackingPolicy.countUnit"
+                )}`,
+                `${t("intro.trackingPolicy.userProperties")} 500${t(
+                  "intro.trackingPolicy.countUnit"
+                )}`,
+                `${t("intro.trackingPolicy.virtualProperties")} 3,000${t(
+                  "intro.trackingPolicy.countUnit"
+                )}`,
               ].map((limit, idx) => (
                 <div
                   key={idx}
@@ -4200,7 +4327,7 @@ export const IntroPage: React.FC = () => {
               }}
             >
               <CheckCircle size={20} />
-              {t('intro.trackingPolicy.bestPractices')}
+              {t("intro.trackingPolicy.bestPractices")}
             </h5>
             <div
               style={{
@@ -4210,10 +4337,10 @@ export const IntroPage: React.FC = () => {
               }}
             >
               {[
-                t('intro.trackingPolicy.bestPractice1'),
-                t('intro.trackingPolicy.bestPractice2'),
-                t('intro.trackingPolicy.bestPractice3'),
-                t('intro.trackingPolicy.bestPractice4'),
+                t("intro.trackingPolicy.bestPractice1"),
+                t("intro.trackingPolicy.bestPractice2"),
+                t("intro.trackingPolicy.bestPractice3"),
+                t("intro.trackingPolicy.bestPractice4"),
               ].map((practice, idx) => (
                 <div
                   key={idx}
@@ -4264,7 +4391,7 @@ export const IntroPage: React.FC = () => {
                 lineHeight: "1.5",
               }}
             >
-              {t('intro.trackingPolicy.checkboxLabel')}
+              {t("intro.trackingPolicy.checkboxLabel")}
             </span>
           }
         />
@@ -4284,7 +4411,7 @@ export const IntroPage: React.FC = () => {
           textAlign: "center",
         }}
       >
-        {t('intro.dataSimulation.title')}
+        {t("intro.dataSimulation.title")}
       </h2>
 
       <p
@@ -4298,13 +4425,16 @@ export const IntroPage: React.FC = () => {
           margin: "0 auto 32px",
         }}
       >
-        {t('intro.dataSimulation.subtitle')}{" "}
-        <strong style={{ color: theme.text }}>{t('intro.dataSimulation.subtitleHighlight')}</strong>{t('intro.dataSimulation.subtitleConnector')}
+        {t("intro.dataSimulation.subtitle")}{" "}
+        <strong style={{ color: theme.text }}>
+          {t("intro.dataSimulation.subtitleHighlight")}
+        </strong>
+        {t("intro.dataSimulation.subtitleConnector")}
         <br />
         <strong style={{ color: theme.text }}>
-          {t('intro.dataSimulation.subtitleHighlight2')}
+          {t("intro.dataSimulation.subtitleHighlight2")}
         </strong>{" "}
-        {t('intro.dataSimulation.subtitleEnd')}
+        {t("intro.dataSimulation.subtitleEnd")}
       </p>
 
       {/* SDK 데이터 수집 원리 상세 설명 */}
@@ -4329,7 +4459,7 @@ export const IntroPage: React.FC = () => {
             marginBottom: "16px",
           }}
         >
-          {t('intro.dataSimulation.sdkTitle')}
+          {t("intro.dataSimulation.sdkTitle")}
         </h3>
         <p
           style={{
@@ -4341,10 +4471,12 @@ export const IntroPage: React.FC = () => {
             margin: "0 auto 24px",
           }}
         >
-          {t('intro.dataSimulation.sdkDescription')}{" "}
-          <strong>{t('intro.dataSimulation.sdkDescriptionHighlight1')}</strong>{t('intro.dataSimulation.sdkDescriptionAnd')}
+          {t("intro.dataSimulation.sdkDescription")}{" "}
+          <strong>{t("intro.dataSimulation.sdkDescriptionHighlight1")}</strong>
+          {t("intro.dataSimulation.sdkDescriptionAnd")}
           <br />
-          <strong>{t('intro.dataSimulation.sdkDescriptionHighlight2')}</strong>{t('intro.dataSimulation.sdkDescriptionEnd')}
+          <strong>{t("intro.dataSimulation.sdkDescriptionHighlight2")}</strong>
+          {t("intro.dataSimulation.sdkDescriptionEnd")}
         </p>
 
         <div
@@ -4358,20 +4490,20 @@ export const IntroPage: React.FC = () => {
           {[
             {
               icon: "⚡",
-              title: t('intro.dataSimulation.realtimeDetection'),
-              desc: t('intro.dataSimulation.realtimeDetectionDesc'),
+              title: t("intro.dataSimulation.realtimeDetection"),
+              desc: t("intro.dataSimulation.realtimeDetectionDesc"),
               color: "#8b5cf6",
             },
             {
               icon: "🤖",
-              title: t('intro.dataSimulation.autoCollection'),
-              desc: t('intro.dataSimulation.autoCollectionDesc'),
+              title: t("intro.dataSimulation.autoCollection"),
+              desc: t("intro.dataSimulation.autoCollectionDesc"),
               color: "#7c3aed",
             },
             {
               icon: "📡",
-              title: t('intro.dataSimulation.secureTransmission'),
-              desc: t('intro.dataSimulation.secureTransmissionDesc'),
+              title: t("intro.dataSimulation.secureTransmission"),
+              desc: t("intro.dataSimulation.secureTransmissionDesc"),
               color: "#6d28d9",
             },
           ].map((feature, index) => (
@@ -4438,7 +4570,7 @@ export const IntroPage: React.FC = () => {
           }}
         >
           <Activity size={28} style={{ color: "#3b82f6" }} />
-          {t('intro.dataSimulation.dataFlowTitle')}
+          {t("intro.dataSimulation.dataFlowTitle")}
         </h3>
 
         <p
@@ -4449,7 +4581,7 @@ export const IntroPage: React.FC = () => {
             marginBottom: "24px",
           }}
         >
-          {t('intro.dataSimulation.dataFlowDescription')}
+          {t("intro.dataSimulation.dataFlowDescription")}
         </p>
 
         <div
@@ -4462,59 +4594,59 @@ export const IntroPage: React.FC = () => {
         >
           {[
             {
-              step: t('intro.dataSimulation.step1'),
-              title: t('intro.dataSimulation.step1Title'),
+              step: t("intro.dataSimulation.step1"),
+              title: t("intro.dataSimulation.step1Title"),
               icon: "👤",
               color: "#8b5cf6",
               detail: "User Action",
-              description: t('intro.dataSimulation.step1Description'),
+              description: t("intro.dataSimulation.step1Description"),
               examples: [
-                t('intro.dataSimulation.step1Example1'),
-                t('intro.dataSimulation.step1Example2'),
-                t('intro.dataSimulation.step1Example3'),
-                t('intro.dataSimulation.step1Example4'),
+                t("intro.dataSimulation.step1Example1"),
+                t("intro.dataSimulation.step1Example2"),
+                t("intro.dataSimulation.step1Example3"),
+                t("intro.dataSimulation.step1Example4"),
               ],
             },
             {
-              step: t('intro.dataSimulation.step2'),
-              title: t('intro.dataSimulation.step2Title'),
+              step: t("intro.dataSimulation.step2"),
+              title: t("intro.dataSimulation.step2Title"),
               icon: "⚡",
               color: "#3b82f6",
               detail: "Event Detection",
-              description: t('intro.dataSimulation.step2Description'),
+              description: t("intro.dataSimulation.step2Description"),
               examples: [
-                t('intro.dataSimulation.step2Example1'),
-                t('intro.dataSimulation.step2Example2'),
-                t('intro.dataSimulation.step2Example3'),
-                t('intro.dataSimulation.step2Example4'),
+                t("intro.dataSimulation.step2Example1"),
+                t("intro.dataSimulation.step2Example2"),
+                t("intro.dataSimulation.step2Example3"),
+                t("intro.dataSimulation.step2Example4"),
               ],
             },
             {
-              step: t('intro.dataSimulation.step3'),
-              title: t('intro.dataSimulation.step3Title'),
+              step: t("intro.dataSimulation.step3"),
+              title: t("intro.dataSimulation.step3Title"),
               icon: "📡",
               color: "#10b981",
               detail: "Data Transmission",
-              description: t('intro.dataSimulation.step3Description'),
+              description: t("intro.dataSimulation.step3Description"),
               examples: [
-                t('intro.dataSimulation.step3Example1'),
-                t('intro.dataSimulation.step3Example2'),
-                t('intro.dataSimulation.step3Example3'),
-                t('intro.dataSimulation.step3Example4'),
+                t("intro.dataSimulation.step3Example1"),
+                t("intro.dataSimulation.step3Example2"),
+                t("intro.dataSimulation.step3Example3"),
+                t("intro.dataSimulation.step3Example4"),
               ],
             },
             {
-              step: t('intro.dataSimulation.step4'),
-              title: t('intro.dataSimulation.step4Title'),
+              step: t("intro.dataSimulation.step4"),
+              title: t("intro.dataSimulation.step4Title"),
               icon: "🔄",
               color: "#f59e0b",
               detail: "Server Processing",
-              description: t('intro.dataSimulation.step4Description'),
+              description: t("intro.dataSimulation.step4Description"),
               examples: [
-                t('intro.dataSimulation.step4Example1'),
-                t('intro.dataSimulation.step4Example2'),
-                t('intro.dataSimulation.step4Example3'),
-                t('intro.dataSimulation.step4Example4'),
+                t("intro.dataSimulation.step4Example1"),
+                t("intro.dataSimulation.step4Example2"),
+                t("intro.dataSimulation.step4Example3"),
+                t("intro.dataSimulation.step4Example4"),
               ],
             },
           ].map((flowStep, index) => (
@@ -4610,7 +4742,7 @@ export const IntroPage: React.FC = () => {
                     marginBottom: "6px",
                   }}
                 >
-                  {t('intro.dataSimulation.keyProcess')}
+                  {t("intro.dataSimulation.keyProcess")}
                 </div>
                 {flowStep.examples.map((example, idx) => (
                   <div
@@ -4668,7 +4800,7 @@ export const IntroPage: React.FC = () => {
               textAlign: "center",
             }}
           >
-            {t('intro.dataSimulation.actualSdkCodeTitle')}
+            {t("intro.dataSimulation.actualSdkCodeTitle")}
           </h4>
 
           <div
@@ -4687,22 +4819,22 @@ export const IntroPage: React.FC = () => {
 var config = {
     appId: "APP_ID",
     serverUrl: "https://YOUR_SERVER_URL/sync_js",
-    batch: true, // ${t('intro.dataSimulation.jsCodeComment1')}
+    batch: true, // ${t("intro.dataSimulation.jsCodeComment1")}
     autoTrack: {
-        pageShow: true, // ${t('intro.dataSimulation.jsCodeComment2')} 
-        pageHide: true, // ${t('intro.dataSimulation.jsCodeComment3')} 
+        pageShow: true, // ${t("intro.dataSimulation.jsCodeComment2")} 
+        pageHide: true, // ${t("intro.dataSimulation.jsCodeComment3")} 
     }
 };
 
 window.ta = thinkingdata;
 
-// 1. ${t('intro.dataSimulation.jsCodeComment4')}
+// 1. ${t("intro.dataSimulation.jsCodeComment4")}
 ta.init(config);
 
-// 2. ${t('intro.dataSimulation.jsCodeComment5')}
+// 2. ${t("intro.dataSimulation.jsCodeComment5")}
 ta.login("TA");
 
-// 3. ${t('intro.dataSimulation.jsCodeComment6')}
+// 3. ${t("intro.dataSimulation.jsCodeComment6")}
 var superProperties = {};
 superProperties["channel"] = "ta"; // string  
 superProperties["age"] = 1; // number  
@@ -4711,32 +4843,34 @@ superProperties["birthday"] = new Date(); // date
 superProperties["object"] = {key: "value"}; // object  
 superProperties["object_arr"] = [{key: "value"}]; // object array
 superProperties["arr"] = ["value"]; // array  
-ta.setSuperProperties(superProperties); // ${t('intro.dataSimulation.jsCodeComment7')}
+ta.setSuperProperties(superProperties); // ${t(
+                    "intro.dataSimulation.jsCodeComment7"
+                  )}
 
-// 4. ${t('intro.dataSimulation.jsCodeComment8')}
-ta.track("product_buy", // ${t('intro.dataSimulation.jsCodeComment9')} 
-    // ${t('intro.dataSimulation.jsCodeComment10')} 
-    {product_name: "${t('intro.dataStructure.exampleName')}"});  
+// 4. ${t("intro.dataSimulation.jsCodeComment8")}
+ta.track("product_buy", // ${t("intro.dataSimulation.jsCodeComment9")} 
+    // ${t("intro.dataSimulation.jsCodeComment10")} 
+    {product_name: "${t("intro.dataStructure.exampleName")}"});  
 
-// 5. ${t('intro.dataSimulation.jsCodeComment11')}
+// 5. ${t("intro.dataSimulation.jsCodeComment11")}
 ta.userSet({username: "TA"});`,
                 },
                 {
-                  language: `Unity C# (${t('intro.dataSimulation.gameLabel')})`,
+                  language: `Unity C# (${t("intro.dataSimulation.gameLabel")})`,
                   code: `using ThinkingData.Analytics;
 
-if (${t('intro.dataSimulation.unityCodeComment1')})
+if (${t("intro.dataSimulation.unityCodeComment1")})
 {
-    // 1. ${t('intro.dataSimulation.unityCodeComment2')}
+    // 1. ${t("intro.dataSimulation.unityCodeComment2")}
     TDAnalytics.Init("APPID", "SERVER");
 
-    // 2. ${t('intro.dataSimulation.unityCodeComment3')}
+    // 2. ${t("intro.dataSimulation.unityCodeComment3")}
     ThinkingAnalyticsAPI.EnableAutoTrack(TDAutoTrackEventType.All);
 
-    // 3. ${t('intro.dataSimulation.unityCodeComment4')}
+    // 3. ${t("intro.dataSimulation.unityCodeComment4")}
     TDAnalytics.Login("TA");
 
-    // 4. ${t('intro.dataSimulation.unityCodeComment5')}
+    // 4. ${t("intro.dataSimulation.unityCodeComment5")}
     Dictionary<string, object> superProperties = new Dictionary<string, object>();
     superProperties["channel"] = "ta"; // String
     superProperties["age"] = 1; // Number
@@ -4745,50 +4879,54 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
     superProperties["object"] = new Dictionary<string, object>() { { "key", "value" } }; // Object
     superProperties["object_arr"] = new List<object>() { new Dictionary<string, object>() { { "key", "value" } } }; // Object List
     superProperties["arr"] = new List<object>() { "value" }; // Array
-    TDAnalytics.SetSuperProperties(superProperties); // ${t('intro.dataSimulation.unityCodeComment5')}
+    TDAnalytics.SetSuperProperties(superProperties); // ${t(
+      "intro.dataSimulation.unityCodeComment5"
+    )}
 
-    // 5. ${t('intro.dataSimulation.unityCodeComment6')}
-    Dictionary<string, object> properties = new Dictionary<string, object>() { { "product_name", "${t('intro.dataStructure.exampleName')}" } };
+    // 5. ${t("intro.dataSimulation.unityCodeComment6")}
+    Dictionary<string, object> properties = new Dictionary<string, object>() { { "product_name", "${t(
+      "intro.dataStructure.exampleName"
+    )}" } };
     TDAnalytics.Track("product_buy", properties);
 
-    // 6. ${t('intro.dataSimulation.unityCodeComment7')}
+    // 6. ${t("intro.dataSimulation.unityCodeComment7")}
     TDAnalytics.UserSet(new Dictionary<string, object>() { { "user_name", "TA" } });`,
                 },
               ];
               return codeExamples.map((codeExample, index) => (
-              <div
-                key={index}
-                style={{
-                  background: "#1a1a1a",
-                  borderRadius: "8px",
-                  padding: "16px",
-                  marginBottom: "12px",
-                }}
-              >
                 <div
+                  key={index}
                   style={{
-                    fontSize: "12px",
-                    color: "#00ff88",
-                    fontWeight: "600",
+                    background: "#1a1a1a",
+                    borderRadius: "8px",
+                    padding: "16px",
                     marginBottom: "12px",
                   }}
                 >
-                  🔧 {codeExample.language}
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: "#00ff88",
+                      fontWeight: "600",
+                      marginBottom: "12px",
+                    }}
+                  >
+                    🔧 {codeExample.language}
+                  </div>
+                  <pre
+                    style={{
+                      fontSize: "10px",
+                      color: "#00ff88",
+                      margin: 0,
+                      lineHeight: "1.4",
+                      wordWrap: "break-word",
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
+                    {codeExample.code}
+                  </pre>
                 </div>
-                <pre
-                  style={{
-                    fontSize: "10px",
-                    color: "#00ff88",
-                    margin: 0,
-                    lineHeight: "1.4",
-                    wordWrap: "break-word",
-                    whiteSpace: "pre-wrap",
-                  }}
-                >
-                  {codeExample.code}
-                </pre>
-              </div>
-            ));
+              ));
             })()}
           </div>
         </div>
@@ -4816,7 +4954,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
             marginBottom: "16px",
           }}
         >
-          {t('intro.realTimeDataExperience')}
+          {t("intro.realTimeDataExperience")}
         </h3>
         <p
           style={{
@@ -4828,12 +4966,12 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
             margin: "0 auto 32px",
           }}
         >
-          {t('intro.realTimeDataDescription')}
+          {t("intro.realTimeDataDescription")}
           <br />
           <strong style={{ color: theme.text }}>
-            {t('intro.gamePlayFlow')}
+            {t("intro.gamePlayFlow")}
           </strong>{" "}
-          {t('intro.wholeProcessAtGlance')}
+          {t("intro.wholeProcessAtGlance")}
         </p>
       </div>
 
@@ -4850,21 +4988,9 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
           marginBottom: "24px",
         }}
       >
-        <h3
-          style={{
-            fontSize: "20px",
-            fontWeight: "700",
-            color: theme.text,
-            marginBottom: "20px",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-          }}
-        ></h3>
-
         <AdvancedIdleRPG
           onAction={generateEvent}
-          isSimulating={isSimulating}
+          isSimulating={false}
           currentAction={currentAction}
           userStats={userStats}
           setUserStats={setUserStats}
@@ -4909,7 +5035,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
             }}
           >
             <BarChart size={20} style={{ color: "#f59e0b" }} />
-            {t('intro.realTimeExperience.jsonRealTimeLog')}
+            {t("intro.realTimeExperience.jsonRealTimeLog")}
           </h3>
 
           <div
@@ -4934,9 +5060,9 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                   fontSize: "12px",
                 }}
               >
-                {t('intro.realTimeExperience.gamePlayRealTime')}
+                {t("intro.realTimeExperience.gamePlayRealTime")}
                 <br />
-                {t('intro.realTimeExperience.jsonEventLogDisplay')}
+                {t("intro.realTimeExperience.jsonEventLogDisplay")}
               </div>
             ) : (
               eventLogs.slice(-6).map((log, index) => (
@@ -5020,7 +5146,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
               }}
             >
               <Database size={18} style={{ color: "#06b6d4" }} />
-              {t('intro.realTimeExperience.eventTable')}
+              {t("intro.realTimeExperience.eventTable")}
             </h3>
 
             <div
@@ -5043,9 +5169,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                 <thead>
                   <tr
                     style={{
-                      background: theme.cardBg === "#ffffff" 
-                        ? "rgba(6, 182, 212, 0.95)" 
-                        : "rgba(6, 182, 212, 0.3)",
+                      background:
+                        theme.cardBg === "#ffffff"
+                          ? "rgba(6, 182, 212, 0.95)"
+                          : "rgba(6, 182, 212, 0.3)",
                       backdropFilter: "blur(10px)",
                       position: "sticky",
                       top: 0,
@@ -5061,9 +5188,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(6, 182, 212, 0.9)" 
-                          : "rgba(6, 182, 212, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(6, 182, 212, 0.9)"
+                            : "rgba(6, 182, 212, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5079,9 +5207,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5097,9 +5226,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5115,9 +5245,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5133,9 +5264,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5151,9 +5283,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5169,9 +5302,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5187,9 +5321,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5205,9 +5340,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5223,9 +5359,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5241,9 +5378,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5259,9 +5397,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5277,9 +5416,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5481,7 +5621,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
               }}
             >
               <Settings size={18} style={{ color: "#8b5cf6" }} />
-              {t('intro.realTimeExperience.userTable')}
+              {t("intro.realTimeExperience.userTable")}
             </h3>
 
             <div
@@ -5504,9 +5644,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                 <thead>
                   <tr
                     style={{
-                      background: theme.cardBg === "#ffffff" 
-                        ? "rgba(139, 92, 246, 0.95)" 
-                        : "rgba(139, 92, 246, 0.3)",
+                      background:
+                        theme.cardBg === "#ffffff"
+                          ? "rgba(139, 92, 246, 0.95)"
+                          : "rgba(139, 92, 246, 0.3)",
                       backdropFilter: "blur(10px)",
                       position: "sticky",
                       top: 0,
@@ -5522,9 +5663,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5540,9 +5682,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5558,9 +5701,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5576,9 +5720,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5594,9 +5739,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5612,9 +5758,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5630,9 +5777,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5648,9 +5796,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5666,9 +5815,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5684,9 +5834,10 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         color: theme.text,
                         fontWeight: "600",
                         fontSize: "9px",
-                        background: theme.cardBg === "#ffffff" 
-                          ? "rgba(139, 92, 246, 0.9)" 
-                          : "rgba(139, 92, 246, 0.2)",
+                        background:
+                          theme.cardBg === "#ffffff"
+                            ? "rgba(139, 92, 246, 0.9)"
+                            : "rgba(139, 92, 246, 0.2)",
                         position: "sticky",
                         top: 0,
                         zIndex: 101,
@@ -5708,7 +5859,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                           fontSize: "10px",
                         }}
                       >
-                        {t('intro.realTimeExperience.gamePlayUserUpdate')}
+                        {t("intro.realTimeExperience.gamePlayUserUpdate")}
                       </td>
                     </tr>
                   ) : (
@@ -5857,7 +6008,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
         </div>
       </div>
 
-{/* {t('intro.trackingPolicy.learningSummaryTitle')} */}
+      {/* {t('intro.trackingPolicy.learningSummaryTitle')} */}
       <div
         style={{
           background:
@@ -5879,7 +6030,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
             marginBottom: "16px",
           }}
         >
-          {t('intro.realTimeExperience.learningContentTitle')}
+          {t("intro.realTimeExperience.learningContentTitle")}
         </h3>
 
         <div
@@ -5893,20 +6044,20 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
           {[
             {
               icon: "⚡",
-              title: t('intro.realTimeExperience.sdkPrincipleTitle'),
-              desc: t('intro.realTimeExperience.sdkPrincipleDesc'),
+              title: t("intro.realTimeExperience.sdkPrincipleTitle"),
+              desc: t("intro.realTimeExperience.sdkPrincipleDesc"),
               color: "#8b5cf6",
             },
             {
               icon: "📊",
-              title: t('intro.realTimeDataGeneration'),
-              desc: t('intro.gamePlayDataLearning'),
+              title: t("intro.realTimeDataGeneration"),
+              desc: t("intro.gamePlayDataLearning"),
               color: "#7c3aed",
             },
             {
               icon: "📡",
-              title: t('intro.realTimeExperience.dataFlowTitle'),
-              desc: t('intro.realTimeExperience.dataFlowDesc'),
+              title: t("intro.realTimeExperience.dataFlowTitle"),
+              desc: t("intro.realTimeExperience.dataFlowDesc"),
               color: "#6d28d9",
             },
           ].map((learning, index) => (
@@ -5954,11 +6105,11 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
             marginBottom: "24px",
           }}
         >
-          {t('intro.realTimeExperience.finalStepIntro')}{" "}
+          {t("intro.realTimeExperience.finalStepIntro")}{" "}
           <strong style={{ color: theme.text }}>
-            {t('intro.realTimeExperience.dataAnalysisWhat')}
+            {t("intro.realTimeExperience.dataAnalysisWhat")}
           </strong>{" "}
-          {t('intro.realTimeExperience.exploreAnalysis')}
+          {t("intro.realTimeExperience.exploreAnalysis")}
         </p>
       </div>
 
@@ -5985,7 +6136,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                 lineHeight: "1.5",
               }}
             >
-              {t('intro.dataSimulation.checkboxLabel')}
+              {t("intro.dataSimulation.checkboxLabel")}
             </span>
           }
         />
@@ -6005,7 +6156,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
           textAlign: "center",
         }}
       >
-        {t('intro.dataUtilization.title')}
+        {t("intro.dataUtilization.title")}
       </h2>
 
       <div
@@ -6031,7 +6182,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
           }}
         >
           <BarChart size={24} style={{ color: "#10b981" }} />
-          {t('intro.dataUtilization.coreModelsTitle')}
+          {t("intro.dataUtilization.coreModelsTitle")}
         </h3>
 
         <div
@@ -6044,102 +6195,102 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
         >
           {[
             {
-              title: t('intro.dataUtilization.eventAnalysis.title'),
-              desc: t('intro.dataUtilization.eventAnalysis.desc'),
+              title: t("intro.dataUtilization.eventAnalysis.title"),
+              desc: t("intro.dataUtilization.eventAnalysis.desc"),
               icon: "📈",
               color: "#06b6d4",
               details: [
-                t('intro.dataUtilization.eventAnalysis.detail1'),
-                t('intro.dataUtilization.eventAnalysis.detail2'),
-                t('intro.dataUtilization.eventAnalysis.detail3')
+                t("intro.dataUtilization.eventAnalysis.detail1"),
+                t("intro.dataUtilization.eventAnalysis.detail2"),
+                t("intro.dataUtilization.eventAnalysis.detail3"),
               ],
             },
             {
-              title: t('intro.dataUtilization.retentionAnalysis.title'),
-              desc: t('intro.dataUtilization.retentionAnalysis.desc'),
+              title: t("intro.dataUtilization.retentionAnalysis.title"),
+              desc: t("intro.dataUtilization.retentionAnalysis.desc"),
               icon: "🔄",
               color: "#84cc16",
               details: [
-                t('intro.dataUtilization.retentionAnalysis.detail1'),
-                t('intro.dataUtilization.retentionAnalysis.detail2'),
-                t('intro.dataUtilization.retentionAnalysis.detail3')
+                t("intro.dataUtilization.retentionAnalysis.detail1"),
+                t("intro.dataUtilization.retentionAnalysis.detail2"),
+                t("intro.dataUtilization.retentionAnalysis.detail3"),
               ],
             },
             {
-              title: t('intro.dataUtilization.funnelAnalysis.title'),
-              desc: t('intro.dataUtilization.funnelAnalysis.desc'),
+              title: t("intro.dataUtilization.funnelAnalysis.title"),
+              desc: t("intro.dataUtilization.funnelAnalysis.desc"),
               icon: "🎯",
               color: "#f97316",
               details: [
-                t('intro.dataUtilization.funnelAnalysis.detail1'),
-                t('intro.dataUtilization.funnelAnalysis.detail2'),
-                t('intro.dataUtilization.funnelAnalysis.detail3')
+                t("intro.dataUtilization.funnelAnalysis.detail1"),
+                t("intro.dataUtilization.funnelAnalysis.detail2"),
+                t("intro.dataUtilization.funnelAnalysis.detail3"),
               ],
             },
             {
-              title: t('intro.dataUtilization.intervalAnalysis.title'),
-              desc: t('intro.dataUtilization.intervalAnalysis.desc'),
+              title: t("intro.dataUtilization.intervalAnalysis.title"),
+              desc: t("intro.dataUtilization.intervalAnalysis.desc"),
               icon: "⏱️",
               color: "#8b5cf6",
               details: [
-                t('intro.dataUtilization.intervalAnalysis.detail1'),
-                t('intro.dataUtilization.intervalAnalysis.detail2'),
-                t('intro.dataUtilization.intervalAnalysis.detail3')
+                t("intro.dataUtilization.intervalAnalysis.detail1"),
+                t("intro.dataUtilization.intervalAnalysis.detail2"),
+                t("intro.dataUtilization.intervalAnalysis.detail3"),
               ],
             },
             {
-              title: t('intro.dataUtilization.distributionAnalysis.title'),
-              desc: t('intro.dataUtilization.distributionAnalysis.desc'),
+              title: t("intro.dataUtilization.distributionAnalysis.title"),
+              desc: t("intro.dataUtilization.distributionAnalysis.desc"),
               icon: "📊",
               color: "#a855f7",
               details: [
-                t('intro.dataUtilization.distributionAnalysis.detail1'),
-                t('intro.dataUtilization.distributionAnalysis.detail2'),
-                t('intro.dataUtilization.distributionAnalysis.detail3')
+                t("intro.dataUtilization.distributionAnalysis.detail1"),
+                t("intro.dataUtilization.distributionAnalysis.detail2"),
+                t("intro.dataUtilization.distributionAnalysis.detail3"),
               ],
             },
             {
-              title: t('intro.dataUtilization.pathAnalysis.title'),
-              desc: t('intro.dataUtilization.pathAnalysis.desc'),
+              title: t("intro.dataUtilization.pathAnalysis.title"),
+              desc: t("intro.dataUtilization.pathAnalysis.desc"),
               icon: "🛤️",
               color: "#3b82f6",
               details: [
-                t('intro.dataUtilization.pathAnalysis.detail1'),
-                t('intro.dataUtilization.pathAnalysis.detail2'),
-                t('intro.dataUtilization.pathAnalysis.detail3')
+                t("intro.dataUtilization.pathAnalysis.detail1"),
+                t("intro.dataUtilization.pathAnalysis.detail2"),
+                t("intro.dataUtilization.pathAnalysis.detail3"),
               ],
             },
             {
-              title: t('intro.dataUtilization.attributeAnalysis.title'),
-              desc: t('intro.dataUtilization.attributeAnalysis.desc'),
+              title: t("intro.dataUtilization.attributeAnalysis.title"),
+              desc: t("intro.dataUtilization.attributeAnalysis.desc"),
               icon: "🔍",
               color: "#10b981",
               details: [
-                t('intro.dataUtilization.attributeAnalysis.detail1'),
-                t('intro.dataUtilization.attributeAnalysis.detail2'),
-                t('intro.dataUtilization.attributeAnalysis.detail3')
+                t("intro.dataUtilization.attributeAnalysis.detail1"),
+                t("intro.dataUtilization.attributeAnalysis.detail2"),
+                t("intro.dataUtilization.attributeAnalysis.detail3"),
               ],
             },
             {
-              title: t('intro.dataUtilization.attributionAnalysis.title'),
-              desc: t('intro.dataUtilization.attributionAnalysis.desc'),
+              title: t("intro.dataUtilization.attributionAnalysis.title"),
+              desc: t("intro.dataUtilization.attributionAnalysis.desc"),
               icon: "📊",
               color: "#f59e0b",
               details: [
-                t('intro.dataUtilization.attributionAnalysis.detail1'),
-                t('intro.dataUtilization.attributionAnalysis.detail2'),
-                t('intro.dataUtilization.attributionAnalysis.detail3')
+                t("intro.dataUtilization.attributionAnalysis.detail1"),
+                t("intro.dataUtilization.attributionAnalysis.detail2"),
+                t("intro.dataUtilization.attributionAnalysis.detail3"),
               ],
             },
             {
-              title: t('intro.dataUtilization.sqlIde.title'),
-              desc: t('intro.dataUtilization.sqlIde.desc'),
+              title: t("intro.dataUtilization.sqlIde.title"),
+              desc: t("intro.dataUtilization.sqlIde.desc"),
               icon: "💻",
               color: "#ef4444",
               details: [
-                t('intro.dataUtilization.sqlIde.detail1'),
-                t('intro.dataUtilization.sqlIde.detail2'),
-                t('intro.dataUtilization.sqlIde.detail3')
+                t("intro.dataUtilization.sqlIde.detail1"),
+                t("intro.dataUtilization.sqlIde.detail2"),
+                t("intro.dataUtilization.sqlIde.detail3"),
               ],
             },
           ].map((analysis, index) => (
@@ -6219,7 +6370,6 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
           ))}
         </div>
 
-
         {/* 추가 기능 */}
         <div
           style={{
@@ -6240,7 +6390,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
               textAlign: "center",
             }}
           >
-            {t('intro.dataUtilization.visualizationTitle')}
+            {t("intro.dataUtilization.visualizationTitle")}
           </h3>
 
           <div
@@ -6253,33 +6403,36 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
           >
             {[
               {
-                title: t('intro.dataUtilization.rankingAnalysis.title'),
-                desc: t('intro.dataUtilization.rankingAnalysis.desc'),
+                title: t("intro.dataUtilization.rankingAnalysis.title"),
+                desc: t("intro.dataUtilization.rankingAnalysis.desc"),
                 features: [
-                  t('intro.dataUtilization.rankingAnalysis.feature1'),
-                  t('intro.dataUtilization.rankingAnalysis.feature2'),
-                  t('intro.dataUtilization.rankingAnalysis.feature3'),
-                  t('intro.dataUtilization.rankingAnalysis.feature4')
-                ]
+                  t("intro.dataUtilization.rankingAnalysis.feature1"),
+                  t("intro.dataUtilization.rankingAnalysis.feature2"),
+                  t("intro.dataUtilization.rankingAnalysis.feature3"),
+                  t("intro.dataUtilization.rankingAnalysis.feature4"),
+                ],
               },
               {
-                title: t('intro.dataUtilization.heatmapAnalysis.title'),
-                desc: t('intro.dataUtilization.heatmapAnalysis.desc'),
+                title: t("intro.dataUtilization.heatmapAnalysis.title"),
+                desc: t("intro.dataUtilization.heatmapAnalysis.desc"),
                 features: [
-                  t('intro.dataUtilization.heatmapAnalysis.feature1'),
-                  t('intro.dataUtilization.heatmapAnalysis.feature2'),
-                  t('intro.dataUtilization.heatmapAnalysis.feature3'),
-                  t('intro.dataUtilization.heatmapAnalysis.feature4')
-                ]
-              }
+                  t("intro.dataUtilization.heatmapAnalysis.feature1"),
+                  t("intro.dataUtilization.heatmapAnalysis.feature2"),
+                  t("intro.dataUtilization.heatmapAnalysis.feature3"),
+                  t("intro.dataUtilization.heatmapAnalysis.feature4"),
+                ],
+              },
             ].map((feature, index) => (
               <div
                 key={index}
                 style={{
-                  background: theme.cardBg === "#ffffff" ? "rgba(59, 130, 246, 0.05)" : "rgba(59, 130, 246, 0.1)",
+                  background:
+                    theme.cardBg === "#ffffff"
+                      ? "rgba(59, 130, 246, 0.05)"
+                      : "rgba(59, 130, 246, 0.1)",
                   borderRadius: "12px",
                   padding: "20px",
-                  border: "1px solid rgba(59, 130, 246, 0.2)"
+                  border: "1px solid rgba(59, 130, 246, 0.2)",
                 }}
               >
                 <h4
@@ -6287,7 +6440,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                     fontSize: "16px",
                     fontWeight: "700",
                     color: theme.text,
-                    margin: "0 0 12px 0"
+                    margin: "0 0 12px 0",
                   }}
                 >
                   {feature.title}
@@ -6297,7 +6450,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                     fontSize: "13px",
                     color: theme.textSecondary,
                     lineHeight: "1.5",
-                    margin: "0 0 12px 0"
+                    margin: "0 0 12px 0",
                   }}
                 >
                   {feature.desc}
@@ -6308,7 +6461,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                     color: theme.textSecondary,
                     lineHeight: "1.4",
                     margin: 0,
-                    paddingLeft: "16px"
+                    paddingLeft: "16px",
                   }}
                 >
                   {feature.features.map((item, idx) => (
@@ -6340,10 +6493,16 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
               textAlign: "center",
             }}
           >
-            {t('intro.dataUtilization.segmentationTitle')}
+            {t("intro.dataUtilization.segmentationTitle")}
           </h3>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "24px",
+            }}
+          >
             <div>
               <h4
                 style={{
@@ -6353,47 +6512,50 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                   margin: "0 0 16px 0",
                   display: "flex",
                   alignItems: "center",
-                  gap: "8px"
+                  gap: "8px",
                 }}
               >
-                {t('intro.dataUtilization.userTags')}
+                {t("intro.dataUtilization.userTags")}
               </h4>
-              
+
               {[
                 {
-                  type: t('intro.dataUtilization.conditionalTag.type'),
-                  desc: t('intro.dataUtilization.conditionalTag.desc'),
-                  examples: t('intro.dataUtilization.conditionalTag.example')
+                  type: t("intro.dataUtilization.conditionalTag.type"),
+                  desc: t("intro.dataUtilization.conditionalTag.desc"),
+                  examples: t("intro.dataUtilization.conditionalTag.example"),
                 },
                 {
-                  type: t('intro.dataUtilization.firstLastTag.type'),
-                  desc: t('intro.dataUtilization.firstLastTag.desc'),
-                  examples: t('intro.dataUtilization.firstLastTag.example')
+                  type: t("intro.dataUtilization.firstLastTag.type"),
+                  desc: t("intro.dataUtilization.firstLastTag.desc"),
+                  examples: t("intro.dataUtilization.firstLastTag.example"),
                 },
                 {
-                  type: t('intro.dataUtilization.metricTag.type'),
-                  desc: t('intro.dataUtilization.metricTag.desc'),
-                  examples: t('intro.dataUtilization.metricTag.example')
+                  type: t("intro.dataUtilization.metricTag.type"),
+                  desc: t("intro.dataUtilization.metricTag.desc"),
+                  examples: t("intro.dataUtilization.metricTag.example"),
                 },
                 {
-                  type: t('intro.dataUtilization.idTag.type'),
-                  desc: t('intro.dataUtilization.idTag.desc'),
-                  examples: t('intro.dataUtilization.idTag.example')
+                  type: t("intro.dataUtilization.idTag.type"),
+                  desc: t("intro.dataUtilization.idTag.desc"),
+                  examples: t("intro.dataUtilization.idTag.example"),
                 },
                 {
-                  type: t('intro.dataUtilization.sqlTag.type'),
-                  desc: t('intro.dataUtilization.sqlTag.desc'),
-                  examples: t('intro.dataUtilization.sqlTag.example')
-                }
+                  type: t("intro.dataUtilization.sqlTag.type"),
+                  desc: t("intro.dataUtilization.sqlTag.desc"),
+                  examples: t("intro.dataUtilization.sqlTag.example"),
+                },
               ].map((tag, index) => (
                 <div
                   key={index}
                   style={{
-                    background: theme.cardBg === "#ffffff" ? "rgba(139, 92, 246, 0.05)" : "rgba(139, 92, 246, 0.1)",
+                    background:
+                      theme.cardBg === "#ffffff"
+                        ? "rgba(139, 92, 246, 0.05)"
+                        : "rgba(139, 92, 246, 0.1)",
                     borderRadius: "8px",
                     padding: "12px",
                     marginBottom: "12px",
-                    border: "1px solid rgba(139, 92, 246, 0.2)"
+                    border: "1px solid rgba(139, 92, 246, 0.2)",
                   }}
                 >
                   <h5
@@ -6401,7 +6563,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                       fontSize: "14px",
                       fontWeight: "600",
                       color: theme.text,
-                      margin: "0 0 6px 0"
+                      margin: "0 0 6px 0",
                     }}
                   >
                     {tag.type}
@@ -6411,13 +6573,13 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                       fontSize: "12px",
                       color: theme.textSecondary,
                       lineHeight: "1.4",
-                      margin: "0 0 8px 0"
+                      margin: "0 0 8px 0",
                     }}
                   >
                     {tag.desc}
                   </p>
                   <div style={{ fontSize: "11px", color: theme.textSecondary }}>
-                    {t('intro.dataUtilization.exampleLabel')} {tag.examples}
+                    {t("intro.dataUtilization.exampleLabel")} {tag.examples}
                   </div>
                 </div>
               ))}
@@ -6432,37 +6594,42 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                   margin: "0 0 16px 0",
                   display: "flex",
                   alignItems: "center",
-                  gap: "8px"
+                  gap: "8px",
                 }}
               >
-                {t('intro.dataUtilization.userCohorts')}
+                {t("intro.dataUtilization.userCohorts")}
               </h4>
-              
+
               {[
                 {
-                  type: t('intro.dataUtilization.conditionalCohort.type'),
-                  desc: t('intro.dataUtilization.conditionalCohort.desc'),
-                  examples: t('intro.dataUtilization.conditionalCohort.example')
+                  type: t("intro.dataUtilization.conditionalCohort.type"),
+                  desc: t("intro.dataUtilization.conditionalCohort.desc"),
+                  examples: t(
+                    "intro.dataUtilization.conditionalCohort.example"
+                  ),
                 },
                 {
-                  type: t('intro.dataUtilization.idCohort.type'),
-                  desc: t('intro.dataUtilization.idCohort.desc'),
-                  examples: t('intro.dataUtilization.idCohort.example')
+                  type: t("intro.dataUtilization.idCohort.type"),
+                  desc: t("intro.dataUtilization.idCohort.desc"),
+                  examples: t("intro.dataUtilization.idCohort.example"),
                 },
                 {
-                  type: t('intro.dataUtilization.sqlCohort.type'),
-                  desc: t('intro.dataUtilization.sqlCohort.desc'),
-                  examples: t('intro.dataUtilization.sqlCohort.example')
-                }
+                  type: t("intro.dataUtilization.sqlCohort.type"),
+                  desc: t("intro.dataUtilization.sqlCohort.desc"),
+                  examples: t("intro.dataUtilization.sqlCohort.example"),
+                },
               ].map((cohort, index) => (
                 <div
                   key={index}
                   style={{
-                    background: theme.cardBg === "#ffffff" ? "rgba(16, 185, 129, 0.05)" : "rgba(16, 185, 129, 0.1)",
+                    background:
+                      theme.cardBg === "#ffffff"
+                        ? "rgba(16, 185, 129, 0.05)"
+                        : "rgba(16, 185, 129, 0.1)",
                     borderRadius: "8px",
                     padding: "12px",
                     marginBottom: "12px",
-                    border: "1px solid rgba(16, 185, 129, 0.2)"
+                    border: "1px solid rgba(16, 185, 129, 0.2)",
                   }}
                 >
                   <h5
@@ -6470,7 +6637,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                       fontSize: "14px",
                       fontWeight: "600",
                       color: theme.text,
-                      margin: "0 0 6px 0"
+                      margin: "0 0 6px 0",
                     }}
                   >
                     {cohort.type}
@@ -6480,13 +6647,13 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                       fontSize: "12px",
                       color: theme.textSecondary,
                       lineHeight: "1.4",
-                      margin: "0 0 8px 0"
+                      margin: "0 0 8px 0",
                     }}
                   >
                     {cohort.desc}
                   </p>
                   <div style={{ fontSize: "11px", color: theme.textSecondary }}>
-                    {t('intro.dataUtilization.exampleLabel')} {cohort.examples}
+                    {t("intro.dataUtilization.exampleLabel")} {cohort.examples}
                   </div>
                 </div>
               ))}
@@ -6497,13 +6664,14 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
         {/* 실제 활용 사례 */}
         <div
           style={{
-            background: "linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1))",
+            background:
+              "linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1))",
             borderRadius: "20px",
             padding: "32px",
             marginBottom: "24px",
             border: "1px solid rgba(16, 185, 129, 0.2)",
             position: "relative",
-            overflow: "hidden"
+            overflow: "hidden",
           }}
         >
           <div
@@ -6513,12 +6681,13 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
               left: "-10%",
               width: "150px",
               height: "150px",
-              background: "linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1))",
+              background:
+                "linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1))",
               borderRadius: "50%",
-              filter: "blur(30px)"
+              filter: "blur(30px)",
             }}
           />
-          
+
           <div style={{ position: "relative", zIndex: 1 }}>
             <h3
               style={{
@@ -6530,62 +6699,86 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: "12px"
+                gap: "12px",
               }}
             >
-              {t('intro.dataUtilization.useCaseTitle')}
+              {t("intro.dataUtilization.useCaseTitle")}
             </h3>
 
             <div
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                gap: "24px"
+                gap: "24px",
               }}
             >
               {[
                 {
-                  step: t('intro.dataUtilization.useCase.step1'),
+                  step: t("intro.dataUtilization.useCase.step1"),
                   icon: "🚨",
                   color: "#ef4444",
-                  content: t('intro.dataUtilization.useCase.step1Content'),
-                  details: [t('intro.dataUtilization.useCase.step1Detail1'), t('intro.dataUtilization.useCase.step1Detail2'), t('intro.dataUtilization.useCase.step1Detail3')]
+                  content: t("intro.dataUtilization.useCase.step1Content"),
+                  details: [
+                    t("intro.dataUtilization.useCase.step1Detail1"),
+                    t("intro.dataUtilization.useCase.step1Detail2"),
+                    t("intro.dataUtilization.useCase.step1Detail3"),
+                  ],
                 },
                 {
-                  step: t('intro.dataUtilization.useCase.step2'),
+                  step: t("intro.dataUtilization.useCase.step2"),
                   icon: "💭",
                   color: "#f59e0b",
-                  content: t('intro.dataUtilization.useCase.step2Content'),
-                  details: [t('intro.dataUtilization.useCase.step2Detail1'), t('intro.dataUtilization.useCase.step2Detail2'), t('intro.dataUtilization.useCase.step2Detail3')]
+                  content: t("intro.dataUtilization.useCase.step2Content"),
+                  details: [
+                    t("intro.dataUtilization.useCase.step2Detail1"),
+                    t("intro.dataUtilization.useCase.step2Detail2"),
+                    t("intro.dataUtilization.useCase.step2Detail3"),
+                  ],
                 },
                 {
-                  step: t('intro.dataUtilization.useCase.step3'),
+                  step: t("intro.dataUtilization.useCase.step3"),
                   icon: "🔍",
                   color: "#3b82f6",
-                  content: t('intro.dataUtilization.useCase.step3Content'),
-                  details: [t('intro.dataUtilization.useCase.step3Detail1'), t('intro.dataUtilization.useCase.step3Detail2'), t('intro.dataUtilization.useCase.step3Detail3')]
+                  content: t("intro.dataUtilization.useCase.step3Content"),
+                  details: [
+                    t("intro.dataUtilization.useCase.step3Detail1"),
+                    t("intro.dataUtilization.useCase.step3Detail2"),
+                    t("intro.dataUtilization.useCase.step3Detail3"),
+                  ],
                 },
                 {
-                  step: t('intro.dataUtilization.useCase.step4'),
+                  step: t("intro.dataUtilization.useCase.step4"),
                   icon: "💡",
                   color: "#10b981",
-                  content: t('intro.dataUtilization.useCase.step4Content'),
-                  details: [t('intro.dataUtilization.useCase.step4Detail1'), t('intro.dataUtilization.useCase.step4Detail2'), t('intro.dataUtilization.useCase.step4Detail3')]
+                  content: t("intro.dataUtilization.useCase.step4Content"),
+                  details: [
+                    t("intro.dataUtilization.useCase.step4Detail1"),
+                    t("intro.dataUtilization.useCase.step4Detail2"),
+                    t("intro.dataUtilization.useCase.step4Detail3"),
+                  ],
                 },
                 {
-                  step: t('intro.dataUtilization.useCase.step5'),
+                  step: t("intro.dataUtilization.useCase.step5"),
                   icon: "🎯",
                   color: "#8b5cf6",
-                  content: t('intro.dataUtilization.useCase.step5Content'),
-                  details: [t('intro.dataUtilization.useCase.step5Detail1'), t('intro.dataUtilization.useCase.step5Detail2'), t('intro.dataUtilization.useCase.step5Detail3')]
+                  content: t("intro.dataUtilization.useCase.step5Content"),
+                  details: [
+                    t("intro.dataUtilization.useCase.step5Detail1"),
+                    t("intro.dataUtilization.useCase.step5Detail2"),
+                    t("intro.dataUtilization.useCase.step5Detail3"),
+                  ],
                 },
                 {
-                  step: t('intro.dataUtilization.useCase.step6'),
+                  step: t("intro.dataUtilization.useCase.step6"),
                   icon: "📈",
                   color: "#06b6d4",
-                  content: t('intro.dataUtilization.useCase.step6Content'),
-                  details: [t('intro.dataUtilization.useCase.step6Detail1'), t('intro.dataUtilization.useCase.step6Detail2'), t('intro.dataUtilization.useCase.step6Detail3')]
-                }
+                  content: t("intro.dataUtilization.useCase.step6Content"),
+                  details: [
+                    t("intro.dataUtilization.useCase.step6Detail1"),
+                    t("intro.dataUtilization.useCase.step6Detail2"),
+                    t("intro.dataUtilization.useCase.step6Detail3"),
+                  ],
+                },
               ].map((item, index) => (
                 <div
                   key={index}
@@ -6596,7 +6789,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                     border: `2px solid ${item.color}20`,
                     position: "relative",
                     overflow: "hidden",
-                    transform: "none"
+                    transform: "none",
                   }}
                 >
                   <div
@@ -6606,16 +6799,16 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                       left: 0,
                       right: 0,
                       height: "4px",
-                      background: item.color
+                      background: item.color,
                     }}
                   />
-                  
+
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
                       gap: "12px",
-                      marginBottom: "12px"
+                      marginBottom: "12px",
                     }}
                   >
                     <div
@@ -6627,7 +6820,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontSize: "20px"
+                        fontSize: "20px",
                       }}
                     >
                       {item.icon}
@@ -6637,32 +6830,32 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                         fontSize: "16px",
                         fontWeight: "700",
                         color: theme.text,
-                        margin: 0
+                        margin: 0,
                       }}
                     >
                       {item.step}
                     </h4>
                   </div>
-                  
+
                   <p
                     style={{
                       fontSize: "14px",
                       color: theme.text,
                       lineHeight: "1.5",
                       margin: "0 0 12px 0",
-                      fontWeight: "600"
+                      fontWeight: "600",
                     }}
                   >
                     {item.content}
                   </p>
-                  
+
                   <ul
                     style={{
                       fontSize: "12px",
                       color: theme.textSecondary,
                       lineHeight: "1.4",
                       margin: 0,
-                      paddingLeft: "16px"
+                      paddingLeft: "16px",
                     }}
                   >
                     {item.details.map((detail, idx) => (
@@ -6677,10 +6870,13 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
               style={{
                 marginTop: "24px",
                 padding: "20px",
-                background: theme.cardBg === "#ffffff" ? "rgba(16, 185, 129, 0.05)" : "rgba(16, 185, 129, 0.1)",
+                background:
+                  theme.cardBg === "#ffffff"
+                    ? "rgba(16, 185, 129, 0.05)"
+                    : "rgba(16, 185, 129, 0.1)",
                 borderRadius: "12px",
                 border: "1px solid rgba(16, 185, 129, 0.3)",
-                textAlign: "center"
+                textAlign: "center",
               }}
             >
               <p
@@ -6689,13 +6885,13 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                   color: theme.text,
                   margin: 0,
                   fontWeight: "600",
-                  lineHeight: "1.6"
+                  lineHeight: "1.6",
                 }}
               >
-                {t('intro.dataUtilization.useCase.successFactor')}
+                {t("intro.dataUtilization.useCase.successFactor")}
                 <br />
                 <span style={{ fontSize: "14px", color: theme.textSecondary }}>
-                  {t('intro.dataUtilization.useCase.process')}
+                  {t("intro.dataUtilization.useCase.process")}
                 </span>
               </p>
             </div>
@@ -6725,7 +6921,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                   lineHeight: "1.5",
                 }}
               >
-                {t('intro.dataUtilization.checkboxLabel')}
+                {t("intro.dataUtilization.checkboxLabel")}
               </span>
             }
           />
@@ -6812,7 +7008,7 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                 margin: "0 0 16px 0",
               }}
             >
-              {t('intro.main.title')}
+              {t("intro.main.title")}
             </h2>
 
             <p
@@ -6824,9 +7020,9 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
                 margin: "0 auto 24px",
               }}
             >
-              {t('intro.main.subtitle')}
+              {t("intro.main.subtitle")}
               <br />
-              {t('intro.main.subtitle2')}
+              {t("intro.main.subtitle2")}
             </p>
 
             {/* 퀵 스타트 통계 */}
@@ -6840,17 +7036,17 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
             >
               {[
                 {
-                  label: t('intro.stats.completedMissions'),
+                  label: t("intro.stats.completedMissions"),
                   value: `${completedCount}/5`,
                   color: "#10b981",
                 },
                 {
-                  label: t('intro.stats.currentStep'),
+                  label: t("intro.stats.currentStep"),
                   value: `${currentStep}`,
                   color: "#8b5cf6",
                 },
                 {
-                  label: t('intro.stats.progress'),
+                  label: t("intro.stats.progress"),
                   value: `${Math.round(progressPercentage)}%`,
                   color: "#f59e0b",
                 },
@@ -7048,6 +7244,45 @@ if (${t('intro.dataSimulation.unityCodeComment1')})
             </button>
           )}
         </div>
+
+        {/* 게이밍 스타일 스크롤 투 탑 버튼 */}
+        {showScrollTop && (
+          <button
+            onClick={scrollToTop}
+            style={{
+              position: 'fixed',
+              bottom: '32px',
+              right: '32px',
+              width: '56px',
+              height: '56px',
+              background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
+              border: `1px solid ${theme.cardBorder}`,
+              borderRadius: '50%',
+              color: 'white',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 8px 25px rgba(139, 92, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3)',
+              backdropFilter: 'blur(20px)',
+              zIndex: 1000,
+              transition: 'all 0.3s ease',
+              transform: showScrollTop ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.8)',
+              opacity: showScrollTop ? 1 : 0
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px) scale(1.1)';
+              (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 35px rgba(139, 92, 246, 0.6), 0 6px 18px rgba(0, 0, 0, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.transform = 'translateY(0) scale(1)';
+              (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3)';
+            }}
+            title={t('navigation.scrollToTop')}
+          >
+            <ChevronUp size={24} />
+          </button>
+        )}
       </div>
     </Layout>
   );
